@@ -3,6 +3,8 @@ import SidebarLayout from './layout/SidebarLayout.vue'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
+import Toast from "primevue/toast";
+
 const route = useRoute()
 
 const isShowLayout = computed(() => {
@@ -14,6 +16,7 @@ const isShowLayout = computed(() => {
 </script>
 
 <template>
+  <Toast /> 
   <SidebarLayout v-if="isShowLayout">
     <RouterView />
   </SidebarLayout>
