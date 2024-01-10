@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, reactive } from 'vue'
 
 import Button from 'primevue/button'
 import Checkbox from 'primevue/checkbox'
@@ -12,14 +12,19 @@ import { useI18n } from 'vue-i18n'
 import { useVuelidate } from '../../node_modules/@vuelidate/core'
 import { required, email, maxLength, minLength } from '../../node_modules/@vuelidate/validators'
 
-const { t } = useI18n()
+import {useAuthService} from "../services/AuthService"
 
-const firstName = ref('')
-const lastName = ref('')
-const selectedCountry = ref('')
-const emailVal = ref('')
-const password = ref('')
-const isTermCondition = ref(false)
+const { t } = useI18n()
+const authService = useAuthService()
+
+const formData = reactive({
+  firstName: "",
+  lastName: "",
+  state: "",
+  emailVal: "",
+  password: "",
+  isTermCondition: ""
+})
 const countries = ref([
   { text: 'Alabama', value: 'AL' },
   { text: 'Alaska', value: 'AK' },
@@ -73,34 +78,48 @@ const countries = ref([
   { text: 'Wyoming', value: 'WY' }
 ])
 
-const rules = computed(() => {
-  return {
-    firstName: {
-      required
-    },
-    lastName: {
-      required
-    },
-    selectedCountry: {
-      required
-    },
-    emailVal: {
-      required,
-      email
-    },
-    password: {
-      required,
-      maxLength: maxLength(12),
-      minLength: minLength(8)
-    }
+const rules = {
+  firstName: {
+    required
+  },
+  lastName: {
+    required
+  },
+  state: {
+    required
+  },
+  emailVal: {
+    required,
+    email
+  },
+  password: {
+    required,
+    maxLength: maxLength(12),
+    minLength: minLength(8)
   }
-})
+}
 
-const v$ = useVuelidate(rules, { emailVal, password })
+
+const v$ = useVuelidate(rules, formData)
 const onSubmit = async (e) => {
   e.preventDefault()
-  v$.value.$touch()
-  // const result = await v$.value.$validate()
+  const result = await v$.value.$validate()
+  if(result) {
+    const {firstName, lastName, state, emailVal, password} = formData
+    console.log('adfsasf', formData)
+    try {
+      await authService.createUser({
+        first_name:firstName,
+        last_name:lastName,
+        state:state, 
+        email:emailVal, 
+        password:password
+      })
+    }
+    catch(err) {
+      console.log(err)
+    }
+  }
 }
 function renderButton() {
   window.gapi.signin2.render('my-signin2', {
@@ -166,7 +185,7 @@ onMounted(() => {
                 <InputText
                   id="firstName"
                   :class="{ 'w-full h-2rem': true }"
-                  v-model="firstName"
+                  v-model="formData.firstName"
                   :placeholder="t('Enter your first name')"
                   aria-describedby="text-error"
                 />
@@ -184,7 +203,7 @@ onMounted(() => {
                 <InputText
                   id="lastName"
                   :class="{ 'w-full h-2rem': true }"
-                  v-model="lastName"
+                  v-model="formData.lastName"
                   :placeholder="t('Enter your last name')"
                   aria-describedby="text-error"
                 />
@@ -202,7 +221,7 @@ onMounted(() => {
                   <font-awesome-icon :icon="['fas', 'earth-americas']" class="country-icon" />
                 </span>
                 <Dropdown
-                  v-model="selectedCountry"
+                  v-model="formData.state"
                   class="w-full h-2rem d-flex align-items-center pl-5"
                   filter
                   optionLabel="text"
@@ -211,7 +230,7 @@ onMounted(() => {
                   :placeholder="t('Enter your state')"
                 />
               </div>
-              <h5 class="text-red-50" v-if="v$.selectedCountry.$error">State is required</h5>
+              <h5 class="text-red-50" v-if="v$.state.$error">State is required</h5>
             </div>
           </div>
           <div>
@@ -224,7 +243,7 @@ onMounted(() => {
                 <InputText
                   id="email"
                   :class="{ 'w-full h-2rem': true }"
-                  v-model="emailVal"
+                  v-model="formData.emailVal"
                   :placeholder="t('Enter your email')"
                   aria-describedby="text-error"
                 />
@@ -245,7 +264,7 @@ onMounted(() => {
                 <InputText
                   id="password"
                   class="w-full h-2rem"
-                  v-model="password"
+                  v-model="formData.password"
                   :placeholder="t('Enter your password')"
                   type="password"
                 />
@@ -262,7 +281,7 @@ onMounted(() => {
             </div>
           </div>
           <div class="flex align-items-center">
-            <Checkbox inputId="termCondition" v-model="isTermCondition" :binary="true" />
+            <Checkbox inputId="termCondition" v-model="formData.isTermCondition" :binary="true" />
 
             <label for="termCondition" class="term-condition-label ml-2 text-sm text-black">
               {{ t('I have read and agreed to the') }}
