@@ -40,5 +40,7 @@ export default {
   Payments: 'Payments',
   Dashboard: 'Dashboard',
   Logout: 'Logout',
-  FAQs: 'FAQs'
+  FAQs: 'FAQs',
+  'Your account has been created': 'Your account has been created',
+  'You can Sign In now':'You can Sign In now'
 }

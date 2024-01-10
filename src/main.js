@@ -12,6 +12,7 @@ import i18n_en from '../i18n_en'
 import icons from './font-awesome-icons'
 
 import PrimeVue from 'primevue/config'
+import ToastService from 'primevue/toastservice';
 
 icons.forEach((icon) => library.add(icon))
 const i18n = createI18n({
@@ -29,6 +30,7 @@ app.use(createPinia())
 app.use(router)
 app.use(i18n)
 app.use(PrimeVue, { ripple: true })
+app.use(ToastService);
 app.component('font-awesome-icon', FontAwesomeIcon)
 
 app.mount('#app')
