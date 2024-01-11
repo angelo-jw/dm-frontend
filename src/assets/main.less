@@ -17,6 +17,9 @@ i,
 svg {
   color: var(--text-color);
 }
+.p-icon {
+  color: var(--primary-color)
+}
 input::placeholder,
 .p-dropdown-label.p-placeholder {
   color: var(--gray-50);
@@ -54,16 +57,30 @@ a {
   right: 27vw!important;
   top: 0px!important;
   width: 50vw;
-  background-color: var(--primary-color);
   border-bottom-left-radius: 27px;
-    border-bottom-right-radius: 27px;
+  border-bottom-right-radius: 27px;
 
+  .p-toast-message.error {
+    .p-toast-message-content {
+      color: red;
+    }
+  }
+  .p-toast-message.success {
+    background-color: var(--primary-color);
+  }
+  .p-toast-message.error {
+    background-color: var(--red);
+  }
   .p-toast-message {
     box-shadow: unset;
     border-bottom-left-radius: 27px;
     border-bottom-right-radius: 27px;
+    border: none;
     .p-toast-message-content  {
       padding: 8px!important;
+      svg {
+        display: none;
+      }
     }
     .p-toast-message-text {
       display: flex;
@@ -73,8 +90,6 @@ a {
         margin-right: 2px;
       }
     }
-    
-    
   }
   
 }
