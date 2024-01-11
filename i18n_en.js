@@ -42,5 +42,6 @@ export default {
   Logout: 'Logout',
   FAQs: 'FAQs',
   'Your account has been created': 'Your account has been created',
-  'You can Sign In now':'You can Sign In now'
+  'You can Sign In now':'You can Sign In now',
+  'There was an error creating your account, please try again': 'There was an error creating your account, please try again'
 }
