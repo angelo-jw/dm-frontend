@@ -1,5 +1,5 @@
-@import './base.css';
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,200&display=swap');
+@import "./base.css";
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,200&display=swap");
 #app {
   width: 100%;
   height: 100%;
@@ -8,7 +8,9 @@
 h6 {
   font-size: 15px;
 }
-
+.background-primary {
+  background-color: var(--text-color);
+}
 .pi {
   line-height: 0;
 }
@@ -18,13 +20,13 @@ svg {
   color: var(--text-color);
 }
 .p-icon {
-  color: var(--primary-color)
+  color: var(--primary-color);
 }
 input::placeholder,
 .p-dropdown-label.p-placeholder {
   color: var(--gray-50);
   font-size: 14px;
-  font-family: 'Poppins';
+  font-family: "Poppins";
   font-weight: 200;
 }
 
@@ -54,8 +56,8 @@ a {
 }
 
 .p-toast {
-  right: 27vw!important;
-  top: 0px!important;
+  right: 27vw !important;
+  top: 0px !important;
   width: 50vw;
   border-bottom-left-radius: 27px;
   border-bottom-right-radius: 27px;
@@ -76,8 +78,8 @@ a {
     border-bottom-left-radius: 27px;
     border-bottom-right-radius: 27px;
     border: none;
-    .p-toast-message-content  {
-      padding: 8px!important;
+    .p-toast-message-content {
+      padding: 8px !important;
       svg {
         display: none;
       }
@@ -91,13 +93,12 @@ a {
       }
     }
   }
-  
 }
 
 .register-view-toast {
   .p-toast-message-text {
     .p-toast-detail {
-      color: var(--text-color)!important;
+      color: var(--text-color) !important;
       font-weight: bold;
     }
   }

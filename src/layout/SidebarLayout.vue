@@ -1,40 +1,41 @@
 <script setup>
-import { SidebarMenu } from 'vue-sidebar-menu'
-import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
+import { SidebarMenu } from "vue-sidebar-menu";
+import "vue-sidebar-menu/dist/vue-sidebar-menu.css";
 
-import { useI18n } from 'vue-i18n'
+import { useI18n } from "vue-i18n";
 
-import logo1 from '../assets/logo1.png'
+import logo1 from "../assets/logo1.png";
 
-import Avatar from 'primevue/avatar'
+import Avatar from "primevue/avatar";
 
-const { t } = useI18n()
+const { t } = useI18n();
+
 const menu = [
   {
-    href: '/activity-tracking',
-    title: t('Activity Tracking'),
+    href: "/",
+    title: t("Activity Tracking"),
     icon: {
-      element: 'i',
-      class: 'pi pi-list'
-    }
+      element: "i",
+      class: "pi pi-list",
+    },
   },
   {
-    href: '/payments',
-    title: t('Payments'),
+    href: "/payments",
+    title: t("Payments"),
     icon: {
-      element: 'i',
-      class: 'pi pi-wallet'
-    }
+      element: "i",
+      class: "pi pi-wallet",
+    },
   },
   {
-    href: '/dashboard',
-    title: t('Dashboard'),
+    href: "/dashboard",
+    title: t("Dashboard"),
     icon: {
-      element: 'i',
-      class: 'pi pi-chart-line'
-    }
-  }
-]
+      element: "i",
+      class: "pi pi-chart-line",
+    },
+  },
+];
 </script>
 
 <style scoped lang="less">
@@ -133,13 +134,19 @@ const menu = [
             />
             <router-link to="/sign-in">
               <div class="flex flex-column cursor-pointer align-items-center">
-                <font-awesome-icon :icon="['fa', 'right-from-bracket']" class="logout-icon fa-2x" />
-                <small>{{ t('Logout') }}</small>
+                <font-awesome-icon
+                  :icon="['fa', 'right-from-bracket']"
+                  class="logout-icon fa-2x"
+                />
+                <small>{{ t("Logout") }}</small>
               </div>
             </router-link>
             <div class="flex flex-column cursor-pointer align-items-center">
-              <font-awesome-icon :icon="['fa', 'circle-question']" class="fa-2x" />
-              <small class="text-color">{{ t('FAQs') }}</small>
+              <font-awesome-icon
+                :icon="['fa', 'circle-question']"
+                class="fa-2x"
+              />
+              <small class="text-color">{{ t("FAQs") }}</small>
             </div>
           </div>
         </div>

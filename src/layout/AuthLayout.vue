@@ -1,49 +1,37 @@
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted } from "vue";
 
-import logo1 from '../assets/logo1.png'
+import logo1 from "../assets/logo1.png";
 
-import Card from 'primevue/card'
-// import InputText from 'primevue/inputtext'
-// import Button from 'primevue/button'
+import Card from "primevue/card";
 
-import { useI18n } from 'vue-i18n'
-// import { useVuelidate } from '@vuelidate/core'
-// import { required, email, maxLength, minLength } from '@vuelidate/validators'
+import { useHelper } from "../helpers/helper";
+import { useI18n } from "vue-i18n";
 
-const { t } = useI18n()
-let isMobile = false
+const { t } = useI18n();
+const helper = useHelper();
 
-if (
-  navigator.userAgent.match(/Android/i) ||
-  navigator.userAgent.match(/webOS/i) ||
-  navigator.userAgent.match(/iPhone/i) ||
-  navigator.userAgent.match(/iPad/i) ||
-  navigator.userAgent.match(/iPod/i) ||
-  navigator.userAgent.match(/BlackBerry/i) ||
-  navigator.userAgent.match(/Windows Phone/i)
-) {
-  isMobile = true
-} else {
-  isMobile = false
-}
+const isMobile = helper.isMobile();
 
 onMounted(() => {
-  let googleLink = document.createElement('script')
-  googleLink.setAttribute('src', 'https://accounts.google.com/gsi/client')
-  document.head.appendChild(googleLink)
-})
+  let googleLink = document.createElement("script");
+  googleLink.setAttribute("src", "https://accounts.google.com/gsi/client");
+  document.head.appendChild(googleLink);
+});
 </script>
 
 <template>
   <div
     class="login-view-wrapper flex md:justify-content-between primary-color align-items-center w-100 h-screen flex-column sm:flex-row px-3 md:px-0 relative"
   >
-    <h6 class="text-color font-light absolute top-0 w-full text-center mt-3" v-if="!isMobile">
-      {{ t('A') }}
-      <i class="font-bold">{{ t('John Wetmore') }} </i>
+    <h6
+      class="text-color font-light absolute top-0 w-full text-center mt-3"
+      v-if="!isMobile"
+    >
+      {{ t("A") }}
+      <i class="font-bold">{{ t("John Wetmore") }} </i>
 
-      {{ t('App') }}
+      {{ t("App") }}
     </h6>
     <div class="wrapper-logo">
       <img class="logo" :src="logo1" />
@@ -57,25 +45,29 @@ onMounted(() => {
         <slot name="content"></slot>
       </template>
     </Card>
-    <div class="flex justify-content-between absolute bottom-0 w-full px-3 pb-4">
+    <div
+      class="flex justify-content-between absolute bottom-0 w-full px-3 pb-4"
+    >
       <h6 class="font-light text-xs w-8rem md:w-27rem">
-        {{ t('Copyright @ 2024 Wetmore Enterprises. All rights reserved') }}
+        {{ t("Copyright @ 2024 Wetmore Enterprises. All rights reserved") }}
       </h6>
       <div class="flex" v-if="!isMobile">
-        <h6 class="mr-2 font-light text-xs">{{ t('Terms of use') }}</h6>
-        <h6 class="mr-2 font-light text-xs">{{ t('License Agreement') }}</h6>
-        <h6 class="mr-2 font-light text-xs">{{ t('Privacy Policy') }}</h6>
-        <h6 class="mr-2 font-light text-xs">{{ t('Copyright Information') }}</h6>
-        <h6 class="font-light text-xs">{{ t('Cookies') }}</h6>
+        <h6 class="mr-2 font-light text-xs">{{ t("Terms of use") }}</h6>
+        <h6 class="mr-2 font-light text-xs">{{ t("License Agreement") }}</h6>
+        <h6 class="mr-2 font-light text-xs">{{ t("Privacy Policy") }}</h6>
+        <h6 class="mr-2 font-light text-xs">
+          {{ t("Copyright Information") }}
+        </h6>
+        <h6 class="font-light text-xs">{{ t("Cookies") }}</h6>
       </div>
-      <h6 class="font-light text-xs" v-else>{{ t('Legal Information') }}</h6>
+      <h6 class="font-light text-xs" v-else>{{ t("Legal Information") }}</h6>
     </div>
   </div>
 </template>
 
 <style scoped lang="less">
 .login-view-wrapper {
-  background-image: url('../assets/success.png');
+  background-image: url("../assets/success.png");
   background-position: center;
   .logo {
     width: 300px;
@@ -91,7 +83,7 @@ onMounted(() => {
     background-image: none;
   }
   .login-view-wrapper {
-    background-image: url('../assets/mobileSuccess.png');
+    background-image: url("../assets/mobileSuccess.png");
     background-position: bottom;
     background-repeat: no-repeat;
     // background-size: 23rem 19rem;

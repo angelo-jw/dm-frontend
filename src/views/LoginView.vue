@@ -1,64 +1,51 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed } from "vue";
 
-// import logo1 from '../assets/logo1.png'
+import InputText from "primevue/inputtext";
+import Button from "primevue/button";
 
-// import Card from 'primevue/card'
-import InputText from 'primevue/inputtext'
-import Button from 'primevue/button'
+import AuthLayout from "../layout/AuthLayout.vue";
 
-import AuthLayout from '../layout/AuthLayout.vue'
+import { useI18n } from "vue-i18n";
+import { useVuelidate } from "../../node_modules/@vuelidate/core";
+import {
+  required,
+  email,
+  maxLength,
+  minLength,
+} from "../../node_modules/@vuelidate/validators";
 
-import { useI18n } from 'vue-i18n'
-import { useVuelidate } from '../../node_modules/@vuelidate/core'
-import { required, email, maxLength, minLength } from '../../node_modules/@vuelidate/validators'
+const { t } = useI18n();
 
-const { t } = useI18n()
-
-const emailVal = ref('')
-const password = ref('')
-let isMobile = false
-
-if (
-  navigator.userAgent.match(/Android/i) ||
-  navigator.userAgent.match(/webOS/i) ||
-  navigator.userAgent.match(/iPhone/i) ||
-  navigator.userAgent.match(/iPad/i) ||
-  navigator.userAgent.match(/iPod/i) ||
-  navigator.userAgent.match(/BlackBerry/i) ||
-  navigator.userAgent.match(/Windows Phone/i)
-) {
-  isMobile = true
-} else {
-  isMobile = false
-}
+const emailVal = ref("");
+const password = ref("");
 
 const rules = computed(() => {
   return {
     emailVal: {
       required,
-      email
+      email,
     },
     password: {
       required,
       maxLength: maxLength(12),
-      minLength: minLength(8)
-    }
-  }
-})
+      minLength: minLength(8),
+    },
+  };
+});
 
-const v$ = useVuelidate(rules, { emailVal, password })
+const v$ = useVuelidate(rules, { emailVal, password });
 
 const onSubmit = async (e) => {
-  e.preventDefault()
+  e.preventDefault();
   // const result = await v$.value.$validate()
-}
+};
 
 onMounted(() => {
-  let googleLink = document.createElement('script')
-  googleLink.setAttribute('src', 'https://accounts.google.com/gsi/client')
-  document.head.appendChild(googleLink)
-})
+  let googleLink = document.createElement("script");
+  googleLink.setAttribute("src", "https://accounts.google.com/gsi/client");
+  document.head.appendChild(googleLink);
+});
 </script>
 
 <template>
@@ -67,16 +54,20 @@ onMounted(() => {
       <div class="flex justify-content-center">
         <h6 class="mr-1">{{ t("Don't have an account ?") }}</h6>
         <router-link to="/sign-up"
-          ><h6 class="text-color font-bold">{{ t('Sign Up Now') }}</h6></router-link
+          ><h6 class="text-color font-bold">
+            {{ t("Sign Up Now") }}
+          </h6></router-link
         >
       </div>
     </template>
     <template #content>
       <form @submit="onSubmit">
         <div class="flex flex-column gap-2">
-          <label for="username" class="text-color font-bold text-sm md:text-base">{{
-            t('Email')
-          }}</label>
+          <label
+            for="username"
+            class="text-color font-bold text-sm md:text-base"
+            >{{ t("Email") }}</label
+          >
           <div>
             <div class="p-input-icon-left w-full">
               <i class="pi pi-user" style="color: #234a72"></i>
@@ -88,14 +79,18 @@ onMounted(() => {
                 aria-describedby="text-error"
               />
             </div>
-            <h5 class="text-red-50" v-if="v$.emailVal.email.$invalid">Your email is invalid</h5>
+            <h5 class="text-red-50" v-if="v$.emailVal.email.$invalid">
+              Your email is invalid
+            </h5>
             <h5 class="text-red-50" v-else-if="v$.emailVal.$errors.length">
               Your email is required
             </h5>
           </div>
-          <label for="password" class="text-color font-bold text-sm md:text-base">{{
-            t('Password')
-          }}</label>
+          <label
+            for="password"
+            class="text-color font-bold text-sm md:text-base"
+            >{{ t("Password") }}</label
+          >
           <div>
             <div class="p-input-icon-left w-full">
               <i class="pi pi-cog" style="color: #234a72"></i>
@@ -125,7 +120,9 @@ onMounted(() => {
                 <span>{{ t('Terms and Conditions') }}</span>
               </label>
             </div> -->
-          <Button class="flex justify-content-center h-2rem" type="submit">Login now</Button>
+          <Button class="flex justify-content-center h-2rem" type="submit"
+            >Login now</Button
+          >
           <div>
             <div
               id="g_id_onload"
