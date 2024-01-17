@@ -47,4 +47,12 @@ export default {
   "There was an error creating your account, please try again":
     "There was an error creating your account, please try again",
   "Happy Tracking,": "Happy Tracking {name}",
+  DateT: "Date",
+  Activity: "Activity",
+  Quantity: "Quantity",
+  "Select activity": "Select activity",
+  Dials: "Dials",
+  DoorKnocks: "DoorKnocks",
+  Appointments: "Appointments",
+  "Enter quantity": "Enter quantity",
 };

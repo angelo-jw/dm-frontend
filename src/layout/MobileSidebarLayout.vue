@@ -24,7 +24,7 @@ const menuItems = [
 </style>
 
 <template>
-  <div class="flex justify-content-around flex-column">
+  <div class="flex justify-content-around flex-column h-full">
     <div class="flex justify-content-between px-3 pt-2">
       <img :src="mobileLogo" />
       <div class="flex align-items-center">
@@ -40,7 +40,7 @@ const menuItems = [
         />
       </div>
     </div>
-    <div class="pt-4">
+    <div class="pt-4 h-full">
       <slot></slot>
     </div>
     <div>

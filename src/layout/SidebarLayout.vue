@@ -118,8 +118,9 @@ const menu = [
 }
 </style>
 <template>
-  <div class="sidebar-layout flex-row">
-    <SidebarMenu :menu="menu">
+  <div class="sidebar-layout grid">
+    <div class="md:col-3 h-full ">
+    <SidebarMenu :menu="menu" class="h-full">
       <template v-slot:footer>
         <div class="footer-wrapper">
           <div class="flex justify-content-center relative mb-4">
@@ -152,6 +153,9 @@ const menu = [
         </div>
       </template>
     </SidebarMenu>
+    </div>
+    <div class="md:col-8">
     <slot></slot>
+    </div>
   </div>
 </template>

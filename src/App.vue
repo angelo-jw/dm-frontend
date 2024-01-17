@@ -24,7 +24,7 @@ const isShowLayout = computed(() => {
 <template>
   <Toast />
   <SidebarLayout v-if="isShowLayout && !isMobile">
-    <RouterView />
+    <RouterView/>
   </SidebarLayout>
   <MobileSidebarLayout v-else-if="isShowLayout && isMobile">
     <RouterView />
