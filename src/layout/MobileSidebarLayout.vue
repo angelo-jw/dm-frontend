@@ -14,12 +14,17 @@ const menuItems = [
   { icon: "pi pi-wallet", label: "", route: "/payments" },
   { icon: "pi pi-chart-line", label: "", route: "/dashboard" },
 ];
+const isShowDropdown = ref(false);
 </script>
 <style lang="less" scoped>
 .user-text {
   z-index: -1;
   position: relative;
   left: 2px;
+}
+.wrapper-logout {
+  top: 61px;
+  right: 21px;
 }
 </style>
 
@@ -34,10 +39,27 @@ const menuItems = [
         >
         <Avatar
           image="https://primefaces.org/cdn/primevue/images/avatar/asiyajavayant.png"
-          class="cursor-pointer"
+          class="cursor-pointer relative"
           size="large"
           shape="circle"
+          @click="isShowDropdown = true"
         />
+        <div
+          class="wrapper-logout shadow-1 absolute w-10rem py-2"
+          v-if="isShowDropdown"
+        >
+          <router-link to="/sign-in">
+            <div
+              class="flex cursor-pointer justify-content-center align-items-center"
+            >
+              <font-awesome-icon
+                :icon="['fa', 'right-from-bracket']"
+                class="logout-icon fa-1x mr-1"
+              />
+              <small>{{ t("Logout") }}</small>
+            </div>
+          </router-link>
+        </div>
       </div>
     </div>
     <div class="pt-4 h-full">
