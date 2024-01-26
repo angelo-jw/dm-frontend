@@ -9,6 +9,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: npm ci && npm run build
+      - name: Create env file
+        run: |
+          touch .env
+          echo VITE_APP_API_URL=${{ secrets.VITE_APP_API_URL }} >> .env
+          echo VITE_APP_GOOGLE_ID=${{ secrets.VITE_APP_GOOGLE_ID }} >> .env
+          cat .env
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
