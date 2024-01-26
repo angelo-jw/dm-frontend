@@ -166,15 +166,6 @@ onMounted(() => {
             :loading="isLoading"
             :label="t('Login Now')"
           />
-          >
-          <div>
-            <div
-              id="g_id_onload"
-              data-client_id="908491129907-uv67o2msi9jbami9fi7ikfb4klc5a304.apps.googleusercontent.com"
-              data-callback="handleCredentialResponse"
-            ></div>
-            <div class="g_id_signin" data-type="standard"></div>
-          </div>
         </div>
       </form>
     </template>
