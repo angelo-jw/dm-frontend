@@ -20,7 +20,7 @@ export default {
   "John Wetmore": "John Wetmore",
   App: "App",
   "Copyright @2024 Wetmore Enterprises. All rights reserved":
-    "Copyright @2024 Wetmore Enterprises. All rights reserved",
+    "Copyright @2024 Wetmore Holdings Inc. All rights reserved",
   "Terms of use": "Terms of use",
   "License Agreement": "License Agreement",
   "Privacy Policy": "Privacy Policy",
