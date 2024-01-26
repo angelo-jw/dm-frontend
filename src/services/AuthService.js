@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const url = "http://127.0.0.1:5000/api";
+const url = import.meta.env.VITE_APP_API_URL;
 export function useAuthService() {
   const createUser = (data) => {
     return axios.post(`${url}/users`, data);
