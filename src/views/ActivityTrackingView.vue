@@ -50,7 +50,10 @@ const addRow = () => {
   });
 };
 const outsideClick = (event) => {
-  if (event.target.classList.length && activeRow.value) {
+  if (
+    !event.target?.classList?.contains("rowVal") &&
+    !event.target?.classList?.contains("p-dropdown-label")
+  ) {
     activeRow.value = "";
   }
 };
@@ -70,40 +73,45 @@ const outsideClick = (event) => {
     >
       <Column field="date" :header="t('Date')" class="w-1 text-sm">
         <template #body="{ index, field, data }">
-          <div v-if="activeRow === `${field}-${index}`">
-            <Calendar v-model="data.date" />
+          <div v-if="activeRow === `${field}-${index}`" class="rowVal w-full">
+            <Calendar
+              v-model="data.date"
+              class="w-full rowVal"
+              dateFormat="yy-mm-dd"
+            />
           </div>
-          <div v-else @click="onCellClick(field, index)">
-            {{ data.date }}
+          <div v-else @click="onCellClick(field, index)" class="rowVal">
+            {{ day(data.date)?.format("YYYY-MM-DD") }}
           </div>
         </template>
       </Column>
       <Column field="activity" :header="t('Activity')" class="w-1 text-sm">
         <template #body="{ field, index, data }">
-          <div v-if="activeRow === `${field}-${index}`">
+          <div v-if="activeRow === `${field}-${index}`" class="rowVal w-full">
             <Dropdown
               v-model="data.activity"
+              class="w-full rowVal"
               optionLabel="text"
               :options="activitiesOption"
               :placeholder="t('Select activity')"
             />
           </div>
-          <div v-else @click="onCellClick(field, index)">
+          <div v-else @click="onCellClick(field, index)" class="rowVal">
             {{ data.activity?.text }}
           </div>
         </template>
       </Column>
       <Column field="quantity" :header="t('Quantity')" class="w-1 text-sm">
         <template #body="{ field, index, data }">
-          <div v-if="activeRow === `${field}-${index}`">
+          <div v-if="activeRow === `${field}-${index}`" class="rowVal">
             <InputText
               id="email"
               v-model="data.quantity"
               :placeholder="t('Enter quantity')"
-              class="w-8 md:w-full"
+              class="w-8 md:w-full rowVal"
             />
           </div>
-          <div v-else @click="onCellClick(field, index)">
+          <div v-else @click="onCellClick(field, index)" class="rowVal">
             {{ data.quantity }}
           </div>
         </template>
