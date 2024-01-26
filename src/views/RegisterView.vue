@@ -201,7 +201,7 @@ onMounted(() => {
     <template v-slot:title>
       <div class="flex justify-content-center">
         <h6 class="mr-1">{{ t("Already have an account ?") }}</h6>
-        <router-link to="/"
+        <router-link to="/sign-in"
           ><h6 class="text-color font-bold">
             {{ t("Sign In Now") }}
           </h6></router-link
@@ -364,15 +364,15 @@ onMounted(() => {
             :label="t('Sign Up')"
             :loading="isLoading"
           />
-          <h6 class="text-color font-bold text-center">{{ t("Or") }}</h6>
-          <div class="w-full">
+          <!-- <h6 class="text-color font-bold text-center">{{ t("Or") }}</h6> -->
+          <!-- <div class="w-full">
             <div
               id="g_id_onload"
               data-client_id="908491129907-uv67o2msi9jbami9fi7ikfb4klc5a304.apps.googleusercontent.com"
               data-callback="handleCredentialResponse"
             ></div>
             <div class="g_id_signin" data-type="standard"></div>
-          </div>
+          </div> -->
         </div>
       </form>
     </template>
