@@ -40,6 +40,11 @@ const menu = [
 
 <style scoped lang="less">
 .sidebar-layout {
+  :deep(.v-sidebar-menu.vsm_collapsed) {
+    .footer-wrapper {
+      display: none;
+    }
+  }
   :deep(.v-sidebar-menu) {
     background-color: white;
     box-shadow: 1px 1px 1px 2px rgba(0, 0, 0, 0.075);
@@ -118,9 +123,8 @@ const menu = [
 }
 </style>
 <template>
-  <div class="sidebar-layout grid">
-    <div class="md:col-3 h-full ">
-    <SidebarMenu :menu="menu" class="h-full">
+  <div class="sidebar-layout flex h-screen">
+    <SidebarMenu :menu="menu" class="h-full relative mr-5">
       <template v-slot:footer>
         <div class="footer-wrapper">
           <div class="flex justify-content-center relative mb-4">
@@ -153,9 +157,9 @@ const menu = [
         </div>
       </template>
     </SidebarMenu>
-    </div>
-    <div class="md:col-8">
-    <slot></slot>
+
+    <div class="flex-1">
+      <slot></slot>
     </div>
   </div>
 </template>
