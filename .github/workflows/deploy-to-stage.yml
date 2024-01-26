@@ -6,6 +6,7 @@ name: Deploy to Firebase Hosting on merge
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
+    environment: STAGE
     steps:
       - uses: actions/checkout@v4
       - run: npm ci && npm run build
