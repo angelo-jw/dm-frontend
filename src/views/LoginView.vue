@@ -166,7 +166,6 @@ onMounted(() => {
             :loading="isLoading"
             :label="t('Login Now')"
           />
-          >
         </div>
       </form>
     </template>
