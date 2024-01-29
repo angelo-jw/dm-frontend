@@ -4,7 +4,7 @@ import { useI18n } from "vue-i18n";
 
 import Avatar from "primevue/avatar";
 
-import mobileLogo from "../assets/mobileLogo.png";
+import mobileLogo from "../assets/logo1.png";
 import MobileMenu from "../components/MobileMenu.vue";
 
 const { t } = useI18n();
@@ -15,6 +15,18 @@ const menuItems = [
   { icon: "pi pi-chart-line", label: "", route: "/dashboard" },
 ];
 const isShowDropdown = ref(false);
+const outsideClick = (e) => {
+  console.log(
+    "adfaffd",
+    e.target,
+    e.target.offsetParent?.classList?.contains("p-avatar")
+  );
+  if (
+    !e.target.classList.contains("dropdown-item") &&
+    !e.target.offsetParent?.classList?.contains("p-avatar")
+  )
+    isShowDropdown.value = false;
+};
 </script>
 <style lang="less" scoped>
 .user-text {
@@ -29,9 +41,12 @@ const isShowDropdown = ref(false);
 </style>
 
 <template>
-  <div class="flex justify-content-around flex-column h-full">
+  <div
+    class="flex justify-content-around flex-column h-full"
+    @click="outsideClick"
+  >
     <div class="flex justify-content-between px-3 pt-2">
-      <img :src="mobileLogo" />
+      <img :src="mobileLogo" width="50" />
       <div class="flex align-items-center">
         <small
           class="user-text pr-2 background-primary text-white px-2 border-round-left"
@@ -50,13 +65,13 @@ const isShowDropdown = ref(false);
         >
           <router-link to="/sign-in">
             <div
-              class="flex cursor-pointer justify-content-center align-items-center"
+              class="flex cursor-pointer justify-content-center align-items-center dropdown-item"
             >
               <font-awesome-icon
                 :icon="['fa', 'right-from-bracket']"
-                class="logout-icon fa-1x mr-1"
+                class="logout-icon fa-1x mr-1 dropdown-item"
               />
-              <small>{{ t("Logout") }}</small>
+              <small class="dropdown-item">{{ t("Logout") }}</small>
             </div>
           </router-link>
         </div>
