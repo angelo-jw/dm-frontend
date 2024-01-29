@@ -50,9 +50,11 @@ const addRow = () => {
   });
 };
 const outsideClick = (event) => {
+  console.log("dame el event mi gebnte bleaa", event);
   if (
     !event.target?.classList?.contains("rowVal") &&
-    !event.target?.classList?.contains("p-dropdown-label")
+    !event.target?.classList?.contains("p-dropdown-label") &&
+    !event.target?.classList.contains("p-inputtext")
   ) {
     activeRow.value = "";
   }
