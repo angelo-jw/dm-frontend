@@ -16,11 +16,6 @@ const menuItems = [
 ];
 const isShowDropdown = ref(false);
 const outsideClick = (e) => {
-  console.log(
-    "adfaffd",
-    e.target,
-    e.target.offsetParent?.classList?.contains("p-avatar")
-  );
   if (
     !e.target.classList.contains("dropdown-item") &&
     !e.target.offsetParent?.classList?.contains("p-avatar")

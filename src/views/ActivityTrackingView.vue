@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 import DataTable from "primevue/datatable";
@@ -9,9 +9,14 @@ import InputText from "primevue/inputtext";
 import Row from "primevue/row";
 import Calendar from "primevue/calendar";
 
+import { useActivityTracker } from "../services/ActivityTrackerService";
+
 import day from "dayjs";
 
+const activityTracker = useActivityTracker();
 const { t } = useI18n();
+
+const isLoading = ref(false);
 const columns = ref([
   {
     field: t("Date"),
@@ -26,29 +31,89 @@ const columns = ref([
     header: t("Quantity"),
   },
 ]);
-const customers = ref([
-  {
-    date: day().format("YYYY-MM-DD"),
-    activity: { text: t("Dials"), value: "dials" },
-    quantity: 10,
-  },
-]);
 const activeRow = ref("");
 const activitiesOption = ref([
   { text: t("Dials"), value: "dials" },
   { text: t("DoorKnocks"), value: "doorknocks" },
   { text: t("Appointments"), value: "appointments" },
 ]);
+const tableData = ref({
+  content: [
+    {
+      date: day().format("YYYY-MM-DD"),
+      activity: { text: t("Dials"), value: "dials" },
+      quantity: 10,
+    },
+    {
+      date: day().format("YYYY-MM-DD"),
+      activity: { text: t("Dials"), value: "dials" },
+      quantity: 10,
+    },
+  ],
+  rows: 10,
+  rowsPerPagination: [10, 20, 50],
+});
+
+//METHODS
+const addRow = async () => {
+  const newRowData = {
+    activity: activitiesOption.value[0],
+    quantity: 0,
+  };
+  tableData.value.content.push({
+    ...newRowData,
+    date: day().format("YYYY-MM-DD"),
+  });
+
+  try {
+    isLoading.value = true;
+    const res = await activityTracker.postActivities(newRowData);
+    // tableData.value = res;
+  } catch {
+    toast.add({
+      severity: "error",
+      detail: `${t(response?.data?.message)}.`,
+      sticky: true,
+      styleClass: "error",
+      closable: false,
+      life: 3000,
+    });
+    tableData.value.splice(tableData.content.length - 1, 1);
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+const getPage = async (paginationOptions) => {
+  const result = "?" + new URLSearchParams(paginationOptions).toString();
+  try {
+    isLoading.value = true;
+    const res = await activityTracker.getActivities(result);
+    // tableData.value = res;
+  } catch {
+    toast.add({
+      severity: "error",
+      detail: `${t(response?.data?.message)}.`,
+      sticky: true,
+      styleClass: "error",
+      closable: false,
+      life: 3000,
+    });
+  } finally {
+    isLoading.value = false;
+  }
+};
+
 const onCellClick = (field, index) => {
   activeRow.value = `${field}-${index}`;
 };
-const addRow = () => {
-  customers.value.push({
-    date: day().format("YYYY-MM-DD"),
-    activity: activitiesOption.value[0],
-    quantity: 0,
-  });
+
+const onPageChange = async (paginationData) => {
+  currentPage.value = paginationData?.page;
+  const lastRowData = tableData?.content[tableData?.content?.length - 1];
+  getPage({ page: currentPage.value, per_page: 10, last_doc_id: lastRowData });
 };
+
 const outsideClick = (event) => {
   if (
     !event.target?.classList?.contains("rowVal") &&
@@ -57,6 +122,10 @@ const outsideClick = (event) => {
     activeRow.value = "";
   }
 };
+
+onMounted(() => {
+  getPage({ page: 0, per_page: 10, last_doc_id: null });
+});
 </script>
 
 <style scoped></style>
@@ -66,10 +135,13 @@ const outsideClick = (event) => {
       {{ t("Activity tracking") }}
     </h1>
     <DataTable
-      :value="customers"
+      :value="tableData.content"
       paginator
-      :rows="10"
-      :rowsPerPageOptions="[10, 20, 50]"
+      currentPageReportTemplate="{ currentPage }"
+      :rows="tableData.rows"
+      :rowsPerPageOptions="tableData.rowsPerPageOptions"
+      :loading="isLoading"
+      @page="onPageChange"
     >
       <Column field="date" :header="t('Date')" class="w-1 text-sm">
         <template #body="{ index, field, data }">
