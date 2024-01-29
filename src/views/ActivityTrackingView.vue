@@ -118,7 +118,7 @@ const outsideClick = (event) => {
       </Column>
       <template #footer>
         <div class="flex justify-content-end cursor-pointer" @click="addRow">
-          <i class="pi pi-plus-circle" style="font-size: 2rem"></i></div
+          <i class="pi pi-plus-circle" style="font-size: 1.3rem"></i></div
       ></template>
     </DataTable>
   </div>
