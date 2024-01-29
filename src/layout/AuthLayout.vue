@@ -22,7 +22,7 @@ onMounted(() => {
 
 <template>
   <div
-    class="login-view-wrapper flex md:justify-content-between primary-color align-items-center w-100 h-screen flex-column sm:flex-row px-3 md:px-0 relative"
+    class="login-view-wrapper flex flex-column align-items-center w-full h-full relative px-3 md:justify-content-between md:px-0 sm:flex-row"
   >
     <h6
       class="text-color font-light absolute top-0 w-full text-center mt-3"
@@ -48,27 +48,43 @@ onMounted(() => {
     <div
       class="flex justify-content-between absolute bottom-0 w-full px-3 pb-4"
     >
-      <h6 class="font-light text-xs w-8rem md:w-27rem">
+      <h6
+        class="font-light w-8rem md:w-27rem wrapper-legal-text"
+        v-if="!isMobile"
+      >
         {{ t("Copyright @ 2024 Wetmore Enterprises. All rights reserved") }}
       </h6>
+      <h6 class="font-light w-8rem md:w-27rem wrapper-legal-text" v-else>
+        {{ t("Copyright @ 2024 Wetmore Enterprises") }}
+      </h6>
       <div class="flex" v-if="!isMobile">
-        <h6 class="mr-2 font-light text-xs">{{ t("Terms of use") }}</h6>
-        <h6 class="mr-2 font-light text-xs">{{ t("License Agreement") }}</h6>
-        <h6 class="mr-2 font-light text-xs">{{ t("Privacy Policy") }}</h6>
-        <h6 class="mr-2 font-light text-xs">
+        <h6 class="mr-2 font-light">{{ t("Terms of use") }}</h6>
+        <h6 class="mr-2 font-light">{{ t("License Agreement") }}</h6>
+        <h6 class="mr-2 font-light">{{ t("Privacy Policy") }}</h6>
+        <h6 class="mr-2 font-light">
           {{ t("Copyright Information") }}
         </h6>
-        <h6 class="font-light text-xs">{{ t("Cookies") }}</h6>
+        <h6 class="font-light">{{ t("Cookies") }}</h6>
       </div>
-      <h6 class="font-light text-xs" v-else>{{ t("Legal Information") }}</h6>
+      <div v-else class="flex flex-column">
+        <h6 class="font-light wrapper-legal-text">
+          {{ t("Legal Information") }}
+        </h6>
+        <h6 class="font-light wrapper-legal-text">
+          {{ t("All rights reserve") }}
+        </h6>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped lang="less">
 .login-view-wrapper {
-  background-image: url("../assets/success.png");
+  background-image: url("../assets/success.jpg");
   background-position: center;
+  background-size: 100vw 100vh;
+  background-repeat: no-repeat;
+  overflow: hidden;
   .logo {
     width: 300px;
     height: 300px;
@@ -83,10 +99,8 @@ onMounted(() => {
     background-image: none;
   }
   .login-view-wrapper {
-    background-image: url("../assets/mobileSuccess.png");
+    background-size: 100vw 40vh;
     background-position: bottom;
-    background-repeat: no-repeat;
-    // background-size: 23rem 19rem;
     .logo {
       width: 100px;
       height: 100px;
@@ -96,6 +110,9 @@ onMounted(() => {
     }
     .login-card {
       background-color: var(--primary-color);
+    }
+    .wrapper-legal-text {
+      font-size: 7px;
     }
   }
 }

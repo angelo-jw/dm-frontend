@@ -56,4 +56,5 @@ export default {
   Appointments: "Appointments",
   "Enter quantity": "Enter quantity",
   EMAIL_NOT_FOUND: "The email was not found",
+  "All rights reserve": "All rights reserve",
 };

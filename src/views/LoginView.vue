@@ -152,14 +152,6 @@ onMounted(() => {
               Your password is required
             </h5>
           </div>
-          <!-- <div class="flex">
-            <Checkbox inputId="termCondition" v-model="isTermCondition" />
-
-            <label for="termCondition" class="ml-2 text-sm text-black">
-              {{ t("I have read and agreed to the") }}
-              <span>{{ t("Terms and Conditions") }}</span>
-            </label>
-          </div> -->
           <Button
             class="flex justify-content-center h-2rem"
             type="submit"
