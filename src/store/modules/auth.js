@@ -5,6 +5,7 @@ const state = () => ({
 const mutations = {
   setToken(state, token) {
     state.token = token;
+    localStorage.setItem("do-more-token", token);
   },
 };
 

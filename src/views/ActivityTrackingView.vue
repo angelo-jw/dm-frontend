@@ -11,11 +11,15 @@ import Calendar from "primevue/calendar";
 
 import { useActivityTracker } from "../services/ActivityTrackerService";
 
+import { useToast } from "primevue/usetoast";
+
 import day from "dayjs";
 
 const activityTracker = useActivityTracker();
 const { t } = useI18n();
+const toast = useToast();
 
+const currentPage = ref(0)
 const isLoading = ref(false);
 const columns = ref([
   {
@@ -38,18 +42,7 @@ const activitiesOption = ref([
   { text: t("Appointments"), value: "appointments" },
 ]);
 const tableData = ref({
-  content: [
-    {
-      date: day().format("YYYY-MM-DD"),
-      activity: { text: t("Dials"), value: "dials" },
-      quantity: 10,
-    },
-    {
-      date: day().format("YYYY-MM-DD"),
-      activity: { text: t("Dials"), value: "dials" },
-      quantity: 10,
-    },
-  ],
+  content: [],
   rows: 10,
   rowsPerPagination: [10, 20, 50],
 });
@@ -57,31 +50,24 @@ const tableData = ref({
 //METHODS
 const addRow = async () => {
   const newRowData = {
-    activity: activitiesOption.value[0],
-    quantity: 0,
+    activity_type: activitiesOption.value[0]?.value,
+    quantity: 1,
   };
-  tableData.value.content.push({
-    ...newRowData,
-    date: day().format("YYYY-MM-DD"),
-  });
-
   try {
     isLoading.value = true;
-    const res = await activityTracker.postActivities(newRowData);
-    // tableData.value = res;
-  } catch {
+    await activityTracker.postActivities(newRowData);
+    getPage({ page: 0, per_page: 10, last_doc_id: null });
+  } catch (err) {
     toast.add({
       severity: "error",
-      detail: `${t(response?.data?.message)}.`,
+      detail: `${t(err.response?.data?.message)}.`,
       sticky: true,
       styleClass: "error",
       closable: false,
       life: 3000,
     });
     tableData.value.splice(tableData.content.length - 1, 1);
-  } finally {
-    isLoading.value = false;
-  }
+  } 
 };
 
 const getPage = async (paginationOptions) => {
@@ -89,11 +75,21 @@ const getPage = async (paginationOptions) => {
   try {
     isLoading.value = true;
     const res = await activityTracker.getActivities(result);
-    // tableData.value = res;
-  } catch {
+    tableData.value.content = res.data?.activities?.map((activity) => {
+      const { activity_type, created_time, id } = activity;
+      return {
+        id,
+        date: day(created_time).format("YYYY-MM-DD"),
+        activity: activitiesOption.value.find(
+          (option) => option.value == activity_type
+        ),
+        quantity: 1
+      };
+    });
+  } catch (err) {
     toast.add({
       severity: "error",
-      detail: `${t(response?.data?.message)}.`,
+      detail: `${t(err?.response?.data?.message)}.`,
       sticky: true,
       styleClass: "error",
       closable: false,
