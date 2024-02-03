@@ -20,6 +20,7 @@
   --vt-c-text-dark-1: var(--vt-c-white);
   --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
   --red: #f9e9ec;
+  --light-blue: #f7f9ff;
 }
 
 /* semantic color variables for this project */

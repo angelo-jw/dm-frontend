@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { useRoute } from "vue-router";
 
 import Avatar from "primevue/avatar";
 
@@ -8,6 +9,7 @@ import mobileLogo from "../assets/logo1.png";
 import MobileMenu from "../components/MobileMenu.vue";
 
 const { t } = useI18n();
+const route = useRoute();
 
 const menuItems = [
   { icon: "pi pi-list", label: "", route: "/" },
@@ -16,11 +18,6 @@ const menuItems = [
 ];
 const isShowDropdown = ref(false);
 const outsideClick = (e) => {
-  console.log(
-    "adfaffd",
-    e.target,
-    e.target.offsetParent?.classList?.contains("p-avatar")
-  );
   if (
     !e.target.classList.contains("dropdown-item") &&
     !e.target.offsetParent?.classList?.contains("p-avatar")
@@ -45,7 +42,7 @@ const outsideClick = (e) => {
     class="flex justify-content-around flex-column h-full"
     @click="outsideClick"
   >
-    <div class="flex justify-content-between px-3 pt-2">
+    <div class="flex justify-content-between px-3 pt-2 h-4rem">
       <img :src="mobileLogo" width="50" />
       <div class="flex align-items-center">
         <small
@@ -77,11 +74,14 @@ const outsideClick = (e) => {
         </div>
       </div>
     </div>
-    <div class="pt-4 h-full">
+    <div
+      :class="{
+        'pt-4 h-full px-2 overflow-y-scroll overflow-x-hidden mb-5 md:mb-0': true,
+        blueBody: route.name == 'dashboard',
+      }"
+    >
       <slot></slot>
     </div>
-    <div>
-      <MobileMenu class="absolute bottom-0 w-full" :items="menuItems" />
-    </div>
+    <MobileMenu class="absolute bottom-0 w-full" :items="menuItems" />
   </div>
 </template>
