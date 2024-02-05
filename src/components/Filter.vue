@@ -16,8 +16,6 @@ const endDate = ref("");
 const emit = defineEmits(["startEndDate"]);
 
 const filter = () => {
-  const test = endDate ? day(endDate.value).format("YYYY-MM-DD") : null;
-  console.log("dame el teset", test, endDate);
   emit("onStartEndDate", {
     startDate: day(startDate.value).format("YYYY-MM-DD"),
     endDate: endDate.value ? day(endDate.value).format("YYYY-MM-DD") : "",

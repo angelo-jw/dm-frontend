@@ -47,7 +47,7 @@ export default {
   "There was an error creating your account, please try again":
     "There was an error creating your account, please try again",
   "Happy Tracking,": "Happy Tracking {name}",
-  DateT: "Date",
+  Date: "Date",
   Activity: "Activity",
   Quantity: "Quantity",
   "Select activity": "Select activity",
@@ -67,4 +67,6 @@ export default {
   Amount: "Amount",
   "Sales by day of the week": "Sales by day of the week",
   "No activities recorded on this day": "No activities recorded on this day",
+  Create: "Create",
+  "Create activity": "Create activity",
 };

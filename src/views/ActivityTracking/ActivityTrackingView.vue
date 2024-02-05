@@ -2,6 +2,7 @@
 import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
+import Button from "primevue/button";
 import DataTable from "primevue/datatable";
 import Dropdown from "primevue/dropdown";
 import Column from "primevue/column"; // optional
@@ -9,9 +10,10 @@ import InputText from "primevue/inputtext";
 import Row from "primevue/row";
 import Calendar from "primevue/calendar";
 
-import Filter from "../components/Filter.vue";
+import CreateActivities from "./CreateActivities.vue";
+import Filter from "../../components/Filter.vue";
 
-import { useActivityTracker } from "../services/ActivityTrackerService";
+import { useActivityTracker } from "../../services/ActivityTrackerService";
 
 import { useToast } from "primevue/usetoast";
 
@@ -25,6 +27,7 @@ const activityTracker = useActivityTracker();
 const { t } = useI18n();
 const toast = useToast();
 
+const visible = ref(false);
 const currentPage = ref(0);
 const isLoading = ref(false);
 const columns = ref([
@@ -76,29 +79,7 @@ const getPage = async (paginationOptions) => {
   const result = "?" + new URLSearchParams(paginationOptions).toString();
   try {
     const res = await activityTracker.getActivities(result);
-    if (res.data?.activities?.length) {
-      const modifyDefaultRows = { ...defaultRows };
-      res.data?.activities?.forEach((activity) => {
-        const { activity_type, created_time, id, quantity } = activity;
-        const formatDate = day(created_time).format("YYYY-MM-DD");
-        modifyDefaultRows[`${activity_type}-${formatDate}`] = {
-          ...modifyDefaultRows[`${activity_type}-${formatDate}`],
-          id,
-          quantity,
-          date: formatDate,
-        };
-      });
-      tableData.value.content = Object.values(modifyDefaultRows);
-      tableData.value.content = tableData.value.content.sort(
-        (a, b) => a.date - b.date
-      );
-    } else {
-      if (startDate == day().format("YYYY-MM-DD")) {
-        tableData.value.content = Object.values(defaultRows);
-      } else {
-        tableData.value.content = [];
-      }
-    }
+    tableData.value.content = res.data.activities;
   } catch (err) {
     if (err.response) {
       toast.add({
@@ -141,7 +122,7 @@ const increaseQuantity = (index) => {
     ...currentRowData,
     quantity: currentRowData.quantity + 1,
   });
-  !currentRowData?.id ? createActivity(index) : updateActivity(index);
+  updateActivity(index);
 };
 const decreaseQuantity = (index) => {
   const currentRowData = { ...tableData.value.content[index] };
@@ -150,36 +131,7 @@ const decreaseQuantity = (index) => {
     ...currentRowData,
     quantity: currentRowData.quantity - 1,
   });
-  !currentRowData?.id ? createActivity(index) : updateActivity(index);
-};
-
-const createActivity = async (index) => {
-  const newRowData = {
-    id: null,
-    created_time: tableData.value.content[index]?.datel,
-    activity_type: tableData.value.content[index]?.activity?.value,
-    quantity: tableData.value.content[index].quantity,
-  };
-  try {
-    await activityTracker.postActivities(newRowData);
-    getPage({
-      page: 0,
-      per_page: 10,
-      last_doc_id: null,
-      start_date: startDate || day().format("YYYY-MM-DD"),
-      end_date: endDate,
-    });
-  } catch (err) {
-    toast.add({
-      severity: "error",
-      detail: `${t(err.response?.data?.message)}.`,
-      sticky: true,
-      styleClass: "error",
-      closable: false,
-      life: 3000,
-    });
-    tableData.value.content.splice(index, 1, oldRowData);
-  }
+  updateActivity(index);
 };
 
 const updateActivity = async (index) => {
@@ -266,40 +218,23 @@ onMounted(() => {
       :loading="isLoading"
       @page="onPageChange"
     >
+      <template #header>
+        <div class="flex justify-content-end">
+          <Button
+            class="h-2rem"
+            type="button"
+            :label="t('Create')"
+            @click="visible = true"
+          />
+        </div>
+      </template>
       <template #empty>
         <h4 class="flex justify-content-center">
           {{ t("No activities recorded on this day") }}
         </h4>
       </template>
-      <Column field="date" :header="t('Date')" class="w-1 text-sm">
-        <template #body="{ index, field, data }">
-          <div v-if="activeRow === `${field}-${index}`" class="rowVal w-full">
-            <Calendar
-              v-model="data.date"
-              class="w-full rowVal"
-              dateFormat="yy-mm-dd"
-            />
-          </div>
-          <div v-else @click="onCellClick(field, index)" class="rowVal">
-            {{ day(data.date)?.format("YYYY-MM-DD") }}
-          </div>
-        </template>
-      </Column>
+      <Column field="date" :header="t('Date')" class="w-1 text-sm"> </Column>
       <Column field="activity" :header="t('Activity')" class="w-1 text-sm">
-        <template #body="{ field, index, data }">
-          <div v-if="activeRow === `${field}-${index}`" class="rowVal w-full">
-            <Dropdown
-              v-model="data.activity"
-              class="w-full rowVal"
-              optionLabel="text"
-              :options="activitiesOption"
-              :placeholder="t('Select activity')"
-            />
-          </div>
-          <div v-else @click="onCellClick(field, index)" class="rowVal">
-            {{ data.activity?.text }}
-          </div>
-        </template>
       </Column>
       <Column field="quantity" :header="t('Quantity')" class="w-1 text-sm">
         <template #body="{ field, index, data }">
@@ -329,10 +264,11 @@ onMounted(() => {
           </div>
         </template>
       </Column>
-      <!-- <template #footer>
-        <div class="flex justify-content-end cursor-pointer" @click="addRow">
-          <i class="pi pi-plus-circle" style="font-size: 1.3rem"></i></div
-      ></template> -->
     </DataTable>
+    <CreateActivities
+      :visible="visible"
+      @onChangeVisibleState="visible = $event"
+      @onGetPage="getPage($event)"
+    />
   </div>
 </template>
