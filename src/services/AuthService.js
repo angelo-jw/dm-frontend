@@ -1,12 +1,10 @@
-import axios from "axios";
-
-const url = import.meta.env.VITE_APP_API_URL;
+import http from "../../http.js";
 export function useAuthService() {
   const createUser = (data) => {
-    return axios.post(`${url}/users`, data);
+    return http.post(`/users`, data);
   };
   const signIn = (data) => {
-    return axios.post(`${url}/auth/login`, data);
+    return http.post(`/auth/login`, data);
   };
   return {
     createUser,

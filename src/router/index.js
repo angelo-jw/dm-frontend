@@ -16,7 +16,8 @@ const router = createRouter({
     {
       path: "/",
       name: "activity-tracking",
-      component: () => import("../views/ActivityTrackingView.vue"),
+      component: () =>
+        import("../views/ActivityTracking/ActivityTrackingView.vue"),
     },
     {
       path: "/payments",
