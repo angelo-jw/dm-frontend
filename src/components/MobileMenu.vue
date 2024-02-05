@@ -14,6 +14,7 @@ const props = defineProps({
 <style lang="less" scoped>
 .mobile-menu-wrapper {
   box-shadow: 1px 1px 6px 1px #000000;
+  background: white;
 }
 :deep(.p-menubar-mobile) {
   .p-menubar-button {
@@ -31,7 +32,7 @@ const props = defineProps({
 </style>
 <template>
   <div
-    class="mobile-menu-wrapper flex align-items-center justify-content-around pt-3 pb-1 border-round-top-xl"
+    class="mobile-menu-wrapper flex align-items-center justify-content-around pt-3 pb-1 border-round-top-xl h-4rem"
   >
     <div class="flex" v-for="(item, index) in items" :key="index">
       <router-link
