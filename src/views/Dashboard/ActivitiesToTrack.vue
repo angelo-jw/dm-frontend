@@ -1,7 +1,7 @@
 <script setup>
+import { onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import CardComponent from "../../components/CardComponent.vue";
-
 const { t } = useI18n();
 </script>
 

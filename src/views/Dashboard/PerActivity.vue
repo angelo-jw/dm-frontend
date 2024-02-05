@@ -1,10 +1,26 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import CardComponent from "../../components/CardComponent.vue";
 import { Chart } from "highcharts-vue";
 
+import { useDashboardService } from "../../services/DashboardService";
+
+import day from "dayjs";
+
+const props = defineProps({
+  startDate: {
+    type: String,
+    default: day().format("YYYY-MM-DD"),
+  },
+  endDate: {
+    type: String,
+  },
+});
+
 const { t } = useI18n();
+const dashboardService = useDashboardService();
+
 const chartOptions = ref({
   chart: {
     type: "pie",
@@ -109,6 +125,21 @@ const chartOptions = ref({
       ],
     },
   ],
+});
+
+const getActivitiesToTrack = async (options) => {
+  const result = "?" + new URLSearchParams(options).toString();
+  try {
+    // const activityCount = await dashboardService.getActivityCount(result);
+    // chartOptions.series = data.map();
+  } catch {}
+};
+
+onMounted(async () => {
+  getActivitiesToTrack({
+    start_date: props.startDate,
+    end_date: props.endDate,
+  });
 });
 </script>
 
