@@ -79,7 +79,15 @@ const getPage = async (paginationOptions) => {
   const result = "?" + new URLSearchParams(paginationOptions).toString();
   try {
     const res = await activityTracker.getActivities(result);
-    tableData.value.content = res.data.activities;
+    tableData.value.content = res.data.activities.map((activity) => {
+      const { created_time, id, quantity, activity_type } = activity;
+      return {
+        date: day(created_time).format("YYYY-MM-DD"),
+        activity: activity_type,
+        quantity,
+        id,
+      };
+    });
   } catch (err) {
     if (err.response) {
       toast.add({
@@ -138,6 +146,7 @@ const updateActivity = async (index) => {
   const updateRow = {
     activity_type: tableData.value.content[index]?.activity?.value,
     quantity: tableData.value.content[index]?.quantity,
+    date: tableData.value.content[index]?.date,
   };
   try {
     await activityTracker.putActivity(
