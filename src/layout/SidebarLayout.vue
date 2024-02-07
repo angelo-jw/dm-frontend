@@ -30,6 +30,14 @@ const menu = [
     },
   },
   {
+    href: "/carrier",
+    title: t("Carrier"),
+    icon: {
+      element: "i",
+      class: "pi pi-money-bill",
+    },
+  },
+  {
     href: "/dashboard",
     title: t("Dashboard"),
     icon: {
