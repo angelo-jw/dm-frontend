@@ -100,4 +100,7 @@ export default {
   "Payment updated successfully": "Payment updated successfully",
   Yes: "Yes",
   No: "No",
+  "Recruiting interview": "Recruiting interview",
+  "No activities": "No activities",
+  "Total for each activity by month": "Total for each activity by Month",
 };

@@ -9,14 +9,16 @@ import TotalSales from "./TotalSales.vue";
 
 import Filter from "../../components/Filter.vue";
 
-import { useDashboardService } from "../../services/DashboardService";
+import day from "dayjs";
 
 const { t } = useI18n();
-const dashboardService = useDashboardService();
+
+const startDate = ref(day().format("YYYY-MM-DD"));
+const endDate = ref("");
 
 const getStartEndDate = (event) => {
-  startDate = event.startDate;
-  endDate = event.endDate;
+  startDate.value = event.startDate;
+  endDate.value = event.endDate;
 };
 </script>
 
@@ -31,13 +33,13 @@ const getStartEndDate = (event) => {
         <ActivitiesToTrack />
       </div>
       <div class="col-12 md:col-3">
-        <PerActivity :startDate="startDate" :endDate="endDate" />
+        <PerActivity :date="{ startDate, endDate }" />
       </div>
       <div class="col-12 md:col-6">
         <SalesDayByWeek />
       </div>
       <div class="col-12">
-        <TotalSales :startDate="startDate" :endDate="endDate" />
+        <TotalSales :date="{ startDate, endDate }" />
       </div>
     </div>
   </div>

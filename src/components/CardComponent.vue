@@ -8,8 +8,19 @@ const props = defineProps({
 });
 </script>
 
+<style lang="less" scoped>
+.card-component {
+  :deep(.p-card-body) {
+    height: 100%;
+    .p-card-content {
+      height: inherit;
+    }
+  }
+}
+</style>
+
 <template>
-  <Card :class="`mt-3 ${height}`">
+  <Card :class="`mt-3 ${height}`" class="card-component">
     <template #title><slot name="title"></slot></template>
     <template #content>
       <slot name="content"></slot>
