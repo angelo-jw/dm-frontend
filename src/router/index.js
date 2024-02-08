@@ -37,7 +37,11 @@ const router = createRouter({
   ],
 });
 router.beforeEach(async (to, from) => {
-  if (!localStorage.getItem("do-more-token") && to.name !== "sign-in") {
+  if (
+    !localStorage.getItem("do-more-token") &&
+    to.name !== "sign-in" &&
+    to.name !== "sign-up"
+  ) {
     return { name: "sign-in" };
   }
 });
