@@ -59,7 +59,7 @@ const onSubmit = async (e) => {
         password: password.value,
       });
       store.dispatch("auth/addToken", res.data?.token);
-      router.push({ name: "activity-tracking" });
+      router.push({ name: "dashboard" });
     } catch (err) {
       const { response } = err;
       toast.add({

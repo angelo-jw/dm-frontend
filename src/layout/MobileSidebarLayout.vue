@@ -13,9 +13,10 @@ const route = useRoute();
 const router = useRouter();
 
 const menuItems = [
-  { icon: "pi pi-list", label: "", route: "/" },
+  { icon: "pi pi-chart-line", label: "", route: "/" },
+  { icon: "pi pi-list", label: "", route: "/activity-tracking" },
   { icon: "pi pi-wallet", label: "", route: "/payments" },
-  { icon: "pi pi-chart-line", label: "", route: "/dashboard" },
+  { icon: "pi pi-money-bill", label: "", route: "/carrier" },
 ];
 const isShowDropdown = ref(false);
 const outsideClick = (e) => {

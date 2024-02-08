@@ -16,6 +16,14 @@ const router = useRouter();
 const menu = [
   {
     href: "/",
+    title: t("Dashboard"),
+    icon: {
+      element: "i",
+      class: "pi pi-chart-line",
+    },
+  },
+  {
+    href: "/activity-tracking",
     title: t("Activity Tracking"),
     icon: {
       element: "i",
@@ -36,14 +44,6 @@ const menu = [
     icon: {
       element: "i",
       class: "pi pi-money-bill",
-    },
-  },
-  {
-    href: "/dashboard",
-    title: t("Dashboard"),
-    icon: {
-      element: "i",
-      class: "pi pi-chart-line",
     },
   },
 ];
