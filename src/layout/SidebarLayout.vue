@@ -3,7 +3,7 @@ import { SidebarMenu } from "vue-sidebar-menu";
 import "vue-sidebar-menu/dist/vue-sidebar-menu.css";
 
 import { useI18n } from "vue-i18n";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 import logo1 from "../assets/logo1.png";
 
@@ -11,6 +11,7 @@ import Avatar from "primevue/avatar";
 
 const { t } = useI18n();
 const route = useRoute();
+const router = useRouter();
 
 const menu = [
   {
@@ -46,6 +47,10 @@ const menu = [
     },
   },
 ];
+const logout = () => {
+  localStorage.setItem("do-more-token", "");
+  router.push("/sign-in");
+};
 </script>
 
 <style scoped lang="less">
@@ -148,15 +153,16 @@ const menu = [
                 size="large"
                 shape="circle"
               />
-              <router-link to="/sign-in">
-                <div class="flex flex-column cursor-pointer align-items-center">
-                  <font-awesome-icon
-                    :icon="['fa', 'right-from-bracket']"
-                    class="logout-icon fa-2x"
-                  />
-                  <small>{{ t("Logout") }}</small>
-                </div>
-              </router-link>
+              <div
+                class="flex flex-column cursor-pointer align-items-center"
+                @click="logout"
+              >
+                <font-awesome-icon
+                  :icon="['fa', 'right-from-bracket']"
+                  class="logout-icon fa-2x"
+                />
+                <small>{{ t("Logout") }}</small>
+              </div>
               <div class="flex flex-column cursor-pointer align-items-center">
                 <font-awesome-icon
                   :icon="['fa', 'circle-question']"
