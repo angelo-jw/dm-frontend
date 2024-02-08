@@ -2,14 +2,17 @@ import axios from "axios";
 
 const instance = axios.create({
   baseURL: import.meta.env.VITE_APP_API_URL,
-  headers: {
-    Authorization: localStorage.getItem("do-more-token"),
-  },
 });
 const logoutErrorStatus = [401];
 
-// instance.defaults.withCredentials = true;
+const oauth2 = function (config) {
+  if (localStorage.getItem("do-more-token")) {
+    config.headers.Authorization = localStorage.getItem("do-more-token");
+  }
+  return config;
+};
 
+instance.interceptors.request.use(oauth2);
 instance.interceptors.response.use(
   function (response) {
     return response;

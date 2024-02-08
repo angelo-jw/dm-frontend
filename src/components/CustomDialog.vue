@@ -7,14 +7,14 @@ const props = defineProps({
   },
   customClass: {
     type: String,
-    default: "w-10rem",
+    default: "",
   },
   customStyle: {
     type: Object,
     default: () => ({ width: "30rem" }),
   },
 });
-const emit = defineEmits(["onGetPage", "onChangeVisibleState"]);
+const emit = defineEmits(["onGetPage", "onChangeVisibleState", "onShow"]);
 </script>
 <style lang="less">
 .custom-dialog {
@@ -44,6 +44,7 @@ const emit = defineEmits(["onGetPage", "onChangeVisibleState"]);
     :class="`${props.customClass} custom-dialog`"
     :style="{ ...props.customStyle }"
     :dismissableMask="true"
+    @show="emit('onShow')"
     ><slot></slot>
     <template #closeicon>
       <i
