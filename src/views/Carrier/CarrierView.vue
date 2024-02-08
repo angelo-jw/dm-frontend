@@ -147,14 +147,6 @@ onMounted(() => {
 });
 </script>
 
-<style lang="less">
-.carrier-view-toast {
-  top: 50% !important;
-  .wrapper-section {
-    background: var(--light-blue);
-  }
-}
-</style>
 <template>
   <div class="h-full">
     <h1 class="uppercase text-color font-bold text-center mt-5 mb-2">
@@ -198,7 +190,7 @@ onMounted(() => {
               position="center"
               group="headless"
               @close="visibleAlert = false"
-              class="carrier-view-toast"
+              class="custom-toast"
             >
               <template #container="{ message, closeCallback }">
                 <section

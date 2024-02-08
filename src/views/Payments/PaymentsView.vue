@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 import Button from "primevue/button";
@@ -32,7 +32,7 @@ const isLoading = ref(false);
 
 const tableData = ref({
   content: [],
-  rows: 10,
+  rows: 1,
   rowsPerPagination: [10, 20, 50],
 });
 
@@ -140,6 +140,12 @@ const deletePayment = async (id, closeCallback) => {
   }
 };
 
+watch(visible, (isVisible) => {
+  if (!isVisible) {
+    currentRowData.value = {};
+  }
+});
+
 onMounted(() => {
   isLoading.value = true;
   getPage({
@@ -187,6 +193,9 @@ onMounted(() => {
         :header="t('Doorknocks Comission')"
         class="w-1 text-sm"
       >
+        <template #body="{ data }">
+          <span>{{ data.comission ? t("Yes") : t("No") }}</span>
+        </template>
       </Column>
       <Column field="actions" :header="t('Actions')" class="w-1 text-sm">
         <template #body="{ data }">
@@ -203,7 +212,7 @@ onMounted(() => {
               position="center"
               group="headless"
               @close="visibleAlert = false"
-              class="carrier-view-toast"
+              class="custom-toast"
             >
               <template #container="{ message, closeCallback }">
                 <section

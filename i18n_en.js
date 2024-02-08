@@ -96,4 +96,8 @@ export default {
   "Carrier created successfully": "Carrier created successfully",
   "Are you sure to delete": "Are you sure to delete payment {name} payment",
   "Payment deleted successfully": "Payment deleted successfully",
+  "Payment created successfully": "Payment created successfully",
+  "Payment updated successfully": "Payment updated successfully",
+  Yes: "Yes",
+  No: "No",
 };

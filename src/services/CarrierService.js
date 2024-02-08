@@ -4,7 +4,7 @@ export function useCarrierService() {
     return http.post("/carrier", data);
   };
   const getCarriers = (options) => {
-    return http.get(`/carrier${options}`);
+    return options ? http.get(`/carrier${options}`) : http.get("/carrier");
   };
   const updateCarrier = (id, data) => {
     return http.put(`/carrier/${id}`, data);

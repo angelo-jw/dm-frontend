@@ -10,7 +10,7 @@ export function usePaymentsService() {
     return http.delete(`payment/${id}`);
   };
   const updatePayment = (id, data) => {
-    return http.post(`payment/${id}`, data);
+    return http.put(`payment/${id}`, data);
   };
   return {
     getPayments,

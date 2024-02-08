@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, reactive } from "vue";
+import { ref, computed, reactive, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 
 import Button from "primevue/button";
@@ -37,7 +37,7 @@ const paymentsService = usePaymentsService();
 const carrierService = useCarrierService();
 const toast = useToast();
 
-const carrierOptions = [];
+const carrierOptions = ref([]);
 
 const formData = reactive({
   date: day().format("YYYY-MM-DD"),
@@ -62,24 +62,43 @@ const result = ref(true);
 const onSubmit = async (e) => {
   e.preventDefault();
   result.value = await v$.value.$validate();
-  if (result) {
+
+  if (result.value) {
     try {
-      isLoading, (value = true);
+      isLoading.value = true;
       if (props.currentRowData?.id) {
         await paymentsService.updatePayment(props.currentRowData?.id, {
           created_time: formData.date,
           amount: formData.amount,
-          carrier_ref: formData.carrier?.value,
+          carrier_id: formData.carrier,
           door_knock_commission: formData.comission,
         });
       } else {
         await paymentsService.createPayment({
-          created_time: formData.date,
+          created_time: day(formData.date).format("YYYY-MM-DD"),
           amount: formData.amount,
-          carrier_ref: formData.carrier?.value,
+          carrier_id: formData.carrier,
           door_knock_commission: formData.comission,
         });
       }
+      emit("onChangeVisibleState", false);
+      emit("onGetPage", {
+        page: 1,
+        per_page: 10,
+        last_doc_id: null,
+        start_date: day().format("YYYY-MM-DD"),
+      });
+      toast.add({
+        severity: "",
+        summary: "",
+        detail: props.currentRowData.id
+          ? `${t("Payment updated successfully")}.`
+          : `${t("Payment created successfully")}.`,
+        sticky: true,
+        styleClass: "success",
+        closable: false,
+        life: 5000,
+      });
     } catch (err) {
       if (err.response) {
         toast.add({
@@ -91,14 +110,47 @@ const onSubmit = async (e) => {
           life: 3000,
         });
       }
+    } finally {
+      isLoading.value = false;
     }
   }
 };
 
 const getCarriers = () => {
-  const { carrierName, notes } = props.currentRowData;
-  formData.carrierName = carrierName;
-  formData.notes = notes;
+  const { date, amount, carrierRef, comission } = props.currentRowData;
+  formData.date = day(date).format("YYYY-MM-DD");
+  formData.amount = amount || 0;
+  formData.carrier = carrierRef;
+  formData.comission = comission || false;
+
+  getCarrierOptions();
+};
+const getCarrierOptions = async () => {
+  try {
+    isLoading.value = true;
+    const res = await carrierService.getCarriers();
+    if (res.data.carriers.length) {
+      carrierOptions.value = res.data.carriers.map((carrier) => {
+        return {
+          text: carrier.carrier_name,
+          value: carrier.id,
+        };
+      });
+    }
+  } catch (err) {
+    if (err.response) {
+      toast.add({
+        severity: "error",
+        detail: t(err.response?.data?.message),
+        sticky: true,
+        styleClass: "error",
+        closable: false,
+        life: 3000,
+      });
+    }
+  } finally {
+    isLoading.value = false;
+  }
 };
 </script>
 
@@ -143,6 +195,7 @@ const getCarriers = () => {
             class="w-full"
             id="carrier"
             optionLabel="text"
+            optionValue="value"
             :options="carrierOptions"
             :placeholder="t('Select carrier')"
           />
@@ -156,7 +209,7 @@ const getCarriers = () => {
             v-model="formData.comission"
             inputId="comission"
             name="comission"
-            :value="true"
+            :binary="true"
           />
           <label for="comission" class="ml-2">
             {{ t("Doorknocks Comission") }}
@@ -164,12 +217,9 @@ const getCarriers = () => {
         </div>
       </div>
       <div class="flex justify-content-center">
-        <Button
-          type="submit"
-          class="h-2rem mt-2"
-          :disabled="isLoading || !result"
-          >{{ t("Create") }}</Button
-        >
+        <Button type="submit" class="h-2rem mt-2" :disabled="isLoading">{{
+          props.currentRowData.id ? t("Update") : t("Create")
+        }}</Button>
       </div>
     </form>
   </CustomDialog>
