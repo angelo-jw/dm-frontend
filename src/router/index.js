@@ -36,5 +36,10 @@ const router = createRouter({
     },
   ],
 });
+router.beforeEach(async (to, from) => {
+  if (!localStorage.getItem("do-more-token") && to.name !== "sign-in") {
+    return { name: "sign-in" };
+  }
+});
 
 export default router;

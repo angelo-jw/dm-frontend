@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 import Avatar from "primevue/avatar";
 
@@ -10,6 +10,7 @@ import MobileMenu from "../components/MobileMenu.vue";
 
 const { t } = useI18n();
 const route = useRoute();
+const router = useRouter();
 
 const menuItems = [
   { icon: "pi pi-list", label: "", route: "/" },
@@ -23,6 +24,11 @@ const outsideClick = (e) => {
     !e.target.offsetParent?.classList?.contains("p-avatar")
   )
     isShowDropdown.value = false;
+};
+
+const logout = () => {
+  localStorage.setItem("do-more-token", "");
+  router.push("/sign-in");
 };
 </script>
 <style lang="less" scoped>
@@ -60,17 +66,16 @@ const outsideClick = (e) => {
           class="wrapper-logout shadow-1 absolute w-10rem py-2"
           v-if="isShowDropdown"
         >
-          <router-link to="/sign-in">
-            <div
-              class="flex cursor-pointer justify-content-center align-items-center dropdown-item"
-            >
-              <font-awesome-icon
-                :icon="['fa', 'right-from-bracket']"
-                class="logout-icon fa-1x mr-1 dropdown-item"
-              />
-              <small class="dropdown-item">{{ t("Logout") }}</small>
-            </div>
-          </router-link>
+          <div
+            class="flex cursor-pointer justify-content-center align-items-center dropdown-item"
+            @click="logout"
+          >
+            <font-awesome-icon
+              :icon="['fa', 'right-from-bracket']"
+              class="logout-icon fa-1x mr-1 dropdown-item"
+            />
+            <small class="dropdown-item">{{ t("Logout") }}</small>
+          </div>
         </div>
       </div>
     </div>
