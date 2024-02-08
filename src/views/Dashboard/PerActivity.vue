@@ -1,10 +1,28 @@
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
+
 import CardComponent from "../../components/CardComponent.vue";
+
+import Skeleton from "primevue/skeleton";
+
 import { Chart } from "highcharts-vue";
 
+import { useDashboardService } from "../../services/DashboardService";
+
+import day from "dayjs";
+
+const props = defineProps({
+  date: {
+    type: Object,
+    default: () => ({ startDate: day().format("YYYY-MM-DD"), endDate: "" }),
+  },
+});
 const { t } = useI18n();
+const dashboardService = useDashboardService();
+
+const total = ref(0);
+const isLoading = ref();
 const chartOptions = ref({
   chart: {
     type: "pie",
@@ -22,7 +40,6 @@ const chartOptions = ref({
     align: "left",
   },
   subtitle: {
-    text: `${t("Total")}:${100}`,
     style: { fontSize: "12px" },
     align: "left",
   },
@@ -89,33 +106,100 @@ const chartOptions = ref({
   series: [
     {
       colorByPoint: true,
-      data: [
-        {
-          name: "Dials",
-          y: 18,
-        },
-        {
-          name: "Doorknocks",
-          y: 60,
-        },
-        {
-          name: "Appointments",
-          y: 239,
-        },
-        {
-          name: "Presentation",
-          y: 4,
-        },
-      ],
     },
   ],
+});
+
+const getPerActivityData = async () => {
+  const result =
+    "?" +
+    new URLSearchParams({
+      start_date: props.date.startDate,
+      end_date: props.date.endDate,
+    }).toString();
+  try {
+    isLoading.value = true;
+    const res = await dashboardService.getActivityCount(result);
+    const chartData = [
+      {
+        name: "Dials",
+        y: res.data?.dials || 0,
+      },
+      {
+        name: "Doorknocks",
+        y: res.data?.doorknocks || 0,
+      },
+      {
+        name: "Appointments",
+        y: res.data?.appointments || 0,
+      },
+      {
+        name: "Presentations",
+        y: res.data?.presentations || 0,
+      },
+      {
+        name: "Recruiting interview",
+        y: res.data?.recruiting_interview || 0,
+      },
+    ];
+    total.value = chartData.reduce((a, b) => a + b.y || 0, 0);
+    chartOptions.value.series[0] = {
+      ...chartOptions.value.series[0],
+      data: chartData,
+    };
+    chartOptions.value.subtitle = {
+      ...chartOptions.value.subtitle,
+      text: `${t("Total")}:${total.value}`,
+    };
+  } catch (err) {
+    toast.add({
+      severity: "error",
+      detail:
+        response?.data?.message ||
+        `${t("There was an error creating your account, please try again")}.`,
+      sticky: true,
+      styleClass: "error",
+      closable: false,
+      life: 3000,
+    });
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+watch(
+  () => props.date,
+  (newDate, oldDate) => {
+    if (JSON.stringify(newDate) !== JSON.stringify(oldDate)) {
+      getPerActivityData();
+    }
+  },
+  { deep: true }
+);
+
+onMounted(() => {
+  getPerActivityData();
 });
 </script>
 
 <template>
   <CardComponent>
     <template #content>
-      <Chart :options="chartOptions"></Chart>
+      <div class="h-full">
+        <h2 class="font-bold uppercase" v-if="isLoading || !total">
+          {{ t("Per activity") }}
+        </h2>
+        <div
+          v-if="isLoading"
+          class="flex justify-content-center align-items-center flex-column mt-4"
+        >
+          <Skeleton class="" shape="circle" size="8rem"></Skeleton>
+        </div>
+        <h4 class="mt-4 text-center" v-else-if="!isLoading && !total">
+          {{ t("No activities") }}
+        </h4>
+        <Chart :options="chartOptions" v-else></Chart>
+      </div>
     </template>
   </CardComponent>
 </template>
