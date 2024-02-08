@@ -4,6 +4,11 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: "/",
+      name: "dashboard",
+      component: () => import("../views/Dashboard/DashboardView.vue"),
+    },
+    {
       path: "/sign-in",
       name: "sign-in",
       component: () => import("../views/LoginView.vue"),
@@ -14,7 +19,7 @@ const router = createRouter({
       component: () => import("../views/RegisterView.vue"),
     },
     {
-      path: "/",
+      path: "/activity-tracking",
       name: "activity-tracking",
       component: () =>
         import("../views/ActivityTracking/ActivityTrackingView.vue"),
@@ -28,11 +33,6 @@ const router = createRouter({
       path: "/carrier",
       name: "carrier",
       component: () => import("../views/Carrier/CarrierView.vue"),
-    },
-    {
-      path: "/dashboard",
-      name: "dashboard",
-      component: () => import("../views/Dashboard/DashboardView.vue"),
     },
   ],
 });
