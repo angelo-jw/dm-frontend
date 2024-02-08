@@ -1,7 +1,7 @@
 <script setup>
+import { onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import CardComponent from "../../components/CardComponent.vue";
-
 const { t } = useI18n();
 </script>
 
@@ -14,7 +14,8 @@ const { t } = useI18n();
       <h4 class="mb-2 mt-2">1. {{ t("Dials") }}</h4>
       <h4 class="mb-2">2. {{ t("DoorKnocks") }}</h4>
       <h4 class="mb-2">3. {{ t("Appointments") }}</h4>
-      <h4>4. {{ t("Presentations") }}</h4>
+      <h4 class="mb-2">4. {{ t("Presentations") }}</h4>
+      <h4>5. {{ t("Recruiting interview") }}</h4>
     </template>
   </CardComponent>
 </template>

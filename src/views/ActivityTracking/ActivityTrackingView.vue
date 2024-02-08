@@ -49,30 +49,14 @@ const activitiesOption = ref([
   { text: t("Dials"), value: "dials" },
   { text: t("DoorKnocks"), value: "doorknocks" },
   { text: t("Appointments"), value: "appointments" },
+  { text: t("Presentations"), value: "presentations" },
+  { text: t("Recruiting interview"), value: "recruiting_interview" },
 ]);
 const tableData = ref({
   content: [],
   rows: 10,
   rowsPerPagination: [10, 20, 50],
 });
-
-let defaultRows = {
-  [`dials-${day().format("YYYY-MM-DD")}`]: {
-    date: day().format("YYYY-MM-DD"),
-    activity: { text: t("Dials"), value: "dials" },
-    quantity: 0,
-  },
-  [`doorknocks-${day().format("YYYY-MM-DD")}`]: {
-    date: day().format("YYYY-MM-DD"),
-    activity: { text: t("DoorKnocks"), value: "doorknocks" },
-    quantity: 0,
-  },
-  [`appointments-${day().format("YYYY-MM-DD")}`]: {
-    date: day().format("YYYY-MM-DD"),
-    activity: { text: t("Appointments"), value: "appointments" },
-    quantity: 0,
-  },
-};
 
 //METHODS
 const getPage = async (paginationOptions) => {
@@ -176,21 +160,6 @@ const updateActivity = async (index) => {
 const getStartEndDate = (event) => {
   startDate = event.startDate;
   endDate = event.endDate;
-  defaultRows = {
-    ...defaultRows,
-    [`dials-${startDate}`]: {
-      ...defaultRows.dials,
-      date: startDate,
-    },
-    [`doorknocks-${startDate}`]: {
-      ...defaultRows.doorknocks,
-      date: startDate,
-    },
-    [`appointments-${startDate}`]: {
-      ...defaultRows.appointments,
-      date: startDate,
-    },
-  };
   isLoading.value = true;
   getPage({
     page: 0,
@@ -259,6 +228,7 @@ onMounted(() => {
                 v-model="data.quantity"
                 :placeholder="t('Enter quantity')"
                 class="w-8 md:w-full rowVal"
+                @blur="updateActivity(index)"
               />
             </div>
             <div v-else @click="onCellClick(field, index)" class="rowVal">
