@@ -92,8 +92,8 @@ const onSubmit = async (e) => {
         severity: "",
         summary: "",
         detail: props.currentRowData.id
-          ? `${t("Payment updated successfully")}.`
-          : `${t("Payment created successfully")}.`,
+          ? `${t("Deposit updated successfully")}.`
+          : `${t("Deposit created successfully")}.`,
         sticky: true,
         styleClass: "success",
         closable: false,
@@ -157,7 +157,7 @@ const getCarrierOptions = async () => {
 <template>
   <CustomDialog
     :visible="props.visible"
-    :header="t('Create payment')"
+    :header="t('Create deposit')"
     @onChangeVisibleState="emit('onChangeVisibleState', false)"
     @show="getCarriers"
   >

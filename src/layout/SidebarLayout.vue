@@ -32,7 +32,7 @@ const menu = [
   },
   {
     href: "/payments",
-    title: t("Payments"),
+    title: t("Deposits"),
     icon: {
       element: "i",
       class: "pi pi-wallet",
