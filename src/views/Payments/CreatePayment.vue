@@ -16,7 +16,6 @@ import { required } from "../../../node_modules/@vuelidate/validators";
 import { useVuelidate } from "../../../node_modules/@vuelidate/core";
 
 import { usePaymentsService } from "../../services/PaymentsService";
-import { useCarrierService } from "../../services/CarrierService";
 
 import day from "dayjs";
 const props = defineProps({
@@ -28,16 +27,17 @@ const props = defineProps({
     type: Object,
     default: () => ({}),
   },
+  carrierOptions: {
+    type: Array,
+    default: () => [],
+  },
 });
 
 const emit = defineEmits(["onGetPage", "onChangeVisibleState"]);
 
 const { t } = useI18n();
 const paymentsService = usePaymentsService();
-const carrierService = useCarrierService();
 const toast = useToast();
-
-const carrierOptions = ref([]);
 
 const formData = reactive({
   date: day().format("YYYY-MM-DD"),
@@ -122,46 +122,28 @@ const getCarriers = () => {
   formData.amount = amount || 0;
   formData.carrier = carrierRef;
   formData.comission = comission || false;
-
-  getCarrierOptions();
-};
-const getCarrierOptions = async () => {
-  try {
-    isLoading.value = true;
-    const res = await carrierService.getCarriers();
-    if (res.data.carriers.length) {
-      carrierOptions.value = res.data.carriers.map((carrier) => {
-        return {
-          text: carrier.carrier_name,
-          value: carrier.id,
-        };
-      });
-    }
-  } catch (err) {
-    if (err.response) {
-      toast.add({
-        severity: "error",
-        detail: t(err.response?.data?.message),
-        sticky: true,
-        styleClass: "error",
-        closable: false,
-        life: 3000,
-      });
-    }
-  } finally {
-    isLoading.value = false;
-  }
 };
 </script>
 
 <template>
   <CustomDialog
     :visible="props.visible"
-    :header="t('Create deposit')"
+    :header="props.carrierOptions.length ? t('Create deposit') : ''"
     @onChangeVisibleState="emit('onChangeVisibleState', false)"
     @show="getCarriers"
   >
-    <form @submit="onSubmit">
+    <div v-if="!props.carrierOptions.length">
+      <h3 class="mb-2">
+        {{ t("In order to create deposits, you need to have a carrier.") }}
+      </h3>
+      <router-link
+        :to="{ name: 'carrier' }"
+        class="w-full flex justify-content-center"
+      >
+        <Button>{{ t("Create carrier") }}</Button></router-link
+      >
+    </div>
+    <form @submit="onSubmit" v-else>
       <div class="w-full" v-if="isLoading">
         <Skeleton height="3rem" class="mb-2 w-full"></Skeleton>
         <Skeleton height="3rem" class="mb-2"></Skeleton>
@@ -196,7 +178,7 @@ const getCarrierOptions = async () => {
             id="carrier"
             optionLabel="text"
             optionValue="value"
-            :options="carrierOptions"
+            :options="props.carrierOptions"
             :placeholder="t('Select carrier')"
           />
           <h5 class="text-red-50 m-0" v-if="v$.carrier.$error">
