@@ -23,7 +23,7 @@ const getStartEndDate = (event) => {
 </script>
 
 <template>
-  <div>
+  <div class="h-full">
     <h1 class="uppercase text-color font-bold text-center mt-5 mb-2">
       {{ t("Dashboard") }}
     </h1>
@@ -38,7 +38,7 @@ const getStartEndDate = (event) => {
       <div class="col-12 md:col-6">
         <SalesDayByWeek />
       </div>
-      <div class="col-12">
+      <div class="col-12 md:col-12">
         <TotalSales :date="{ startDate, endDate }" />
       </div>
     </div>

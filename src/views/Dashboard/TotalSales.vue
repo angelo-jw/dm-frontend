@@ -72,9 +72,9 @@ const chartOptions = ref({
   },
   legend: {
     align: "left",
-    x: 70,
+    x: 400,
     verticalAlign: "top",
-    y: 20,
+    y: -4,
     floating: true,
     backgroundColor:
       Highcharts.defaultOptions.legend.backgroundColor || "white",
@@ -104,65 +104,28 @@ const getTotalSalesData = async () => {
       year: day(props.date.startDate).format("YYYY"),
     }).toString();
   try {
-    let chartData = {
-      dials: {
-        name: "Dials",
-        data: [],
-      },
-      doorknocks: {
-        name: "Doorknocks",
-        data: [],
-      },
-      appointments: {
-        name: "Appointments",
-        data: [],
-      },
-      presentations: {
-        name: "Presentations",
-        data: [],
-      },
-      recruitingInterview: {
-        name: "Recruiting interview",
-        data: [],
-      },
-    };
+    let chartData = {};
     isLoading.value = true;
     const res = await dashboardService.getActivityCountPerMonth(result);
     const convertDataToArray = Object.values(res.data);
     if (convertDataToArray.length) {
       convertDataToArray.forEach((chartItems) => {
-        chartData = {
-          ...chartData,
-          dials: {
-            ...chartData.dials,
-            data: [...chartData.dials.data, chartItems?.dials || 0],
-          },
-          doorknocks: {
-            ...chartData.doorknocks,
-            data: [...chartData.doorknocks.data, chartItems.doorknocks || 0],
-          },
-          appointments: {
-            ...chartData.appointments,
-            data: [
-              ...chartData.appointments.data,
-              chartItems.appointments || 0,
-            ],
-          },
-          presentations: {
-            ...chartData.presentations,
-            data: [
-              ...chartData.presentations.data,
-              chartItems.presentations || 0,
-            ],
-          },
-          recruitingInterview: {
-            ...chartData.recruitingInterview,
-            data: [
-              ...chartData.recruitingInterview.data,
-              chartItems.recruiting_interview || 0,
-            ],
-          },
-        };
+        const keys = Object.keys(chartItems);
+        const values = Object.values(chartItems);
+
+        keys.forEach((key, index) => {
+          if (!chartData[key]) {
+            chartData[key] = {
+              name: key,
+              data: [values[index]],
+            };
+          } else {
+            chartData[key] = {
+              name: key,
+              data: [...chartData[key].data, values[index]],
+            };
+          }
+        });
       });
       chartOptions.value.series = Object.values(chartData);
     }
@@ -198,7 +161,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <CardComponent height="h-19rem">
+  <CardComponent>
     <template #content>
       <div class="h-full">
         <h2
