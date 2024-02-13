@@ -120,7 +120,7 @@ const deletePayment = async (id, closeCallback) => {
     toast.add({
       severity: "",
       summary: "",
-      detail: `${t("Payment deleted successfully")}.`,
+      detail: `${t("Deposit deleted successfully")}.`,
       sticky: true,
       styleClass: "success",
       closable: false,
@@ -161,7 +161,7 @@ onMounted(() => {
 <template>
   <div class="h-full">
     <h1 class="uppercase text-color font-bold text-center mt-5 mb-2">
-      {{ t("Payments") }}
+      {{ t("Deposits") }}
     </h1>
     <Filter @onStartEndDate="getStartEndDate" />
     <DataTable
@@ -178,7 +178,7 @@ onMounted(() => {
           <Button
             class="h-2rem flex align-items-center"
             type="button"
-            :label="t('Create payment')"
+            :label="t('Create deposit')"
             @click="visible = true"
           />
         </div>
