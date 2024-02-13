@@ -14,7 +14,6 @@ import { useVuelidate } from "../../node_modules/@vuelidate/core";
 import {
   required,
   email,
-  maxLength,
   minLength,
 } from "../../node_modules/@vuelidate/validators";
 import { useRoute, useRouter } from "vue-router";
@@ -105,7 +104,6 @@ const rules = {
   },
   password: {
     required,
-    maxLength: maxLength(12),
     minLength: minLength(8),
   },
 };
@@ -331,9 +329,6 @@ onMounted(() => {
                   :placeholder="t('Enter your password')"
                 />
               </div>
-              <h5 class="text-red-50" v-if="v$.password.maxLength.$invalid">
-                Your password should less or equal than 12
-              </h5>
               <h5 class="text-red-50" v-if="v$.password.minLength.$invalid">
                 Your password must contain at least 8 characters
               </h5>
