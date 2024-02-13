@@ -103,4 +103,6 @@ export default {
   "Recruiting interview": "Recruiting interview",
   "No activities": "No activities",
   "Total for each activity by month": "Total for each activity by Month",
+  "In order to create deposits, you need to have a carrier":
+    "In order to create deposits, you need to have a carrier",
 };

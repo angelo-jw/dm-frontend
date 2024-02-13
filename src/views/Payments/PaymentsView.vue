@@ -14,12 +14,14 @@ import Filter from "../../components/Filter.vue";
 import { useToast } from "primevue/usetoast";
 
 import { usePaymentsService } from "../../services/PaymentsService";
+import { useCarrierService } from "../../services/CarrierService";
 
 import day from "dayjs";
 
 const { t } = useI18n();
 const toast = useToast();
 const paymentsService = usePaymentsService();
+const carrierService = useCarrierService();
 
 let startDate = day().format("YYYY-MM-DD");
 let endDate = "";
@@ -35,6 +37,8 @@ const tableData = ref({
   rows: 1,
   rowsPerPagination: [10, 20, 50],
 });
+
+const carrierOptions = ref([]);
 
 //METHODS
 const getPage = async (paginationOptions) => {
@@ -140,14 +144,40 @@ const deletePayment = async (id, closeCallback) => {
   }
 };
 
+const getCarrierOptions = async () => {
+  try {
+    const res = await carrierService.getCarriers();
+    if (res.data.carriers.length) {
+      carrierOptions.value = res.data.carriers.map((carrier) => {
+        return {
+          text: carrier.carrier_name,
+          value: carrier.id,
+        };
+      });
+    }
+  } catch (err) {
+    if (err.response) {
+      toast.add({
+        severity: "error",
+        detail: t(err.response?.data?.message),
+        sticky: true,
+        styleClass: "error",
+        closable: false,
+        life: 3000,
+      });
+    }
+  }
+};
+
 watch(visible, (isVisible) => {
   if (!isVisible) {
     currentRowData.value = {};
   }
 });
 
-onMounted(() => {
+onMounted(async () => {
   isLoading.value = true;
+  await getCarrierOptions();
   getPage({
     page: 0,
     per_page: 10,
@@ -251,6 +281,7 @@ onMounted(() => {
     <CreatePayment
       :visible="visible"
       :currentRowData="currentRowData"
+      :carrierOptions="carrierOptions"
       @onChangeVisibleState="visible = $event"
       @onGetPage="getPage($event)"
     />
