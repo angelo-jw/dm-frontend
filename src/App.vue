@@ -22,14 +22,16 @@ const isShowLayout = computed(() => {
 </script>
 
 <template>
-  <Toast />
-  <SidebarLayout v-if="isShowLayout && !isMobile">
-    <RouterView/>
-  </SidebarLayout>
-  <MobileSidebarLayout v-else-if="isShowLayout && isMobile">
-    <RouterView />
-  </MobileSidebarLayout>
-  <RouterView v-else />
+  <div :class="{ blueBody: route.name == 'dashboard' }">
+    <Toast />
+    <SidebarLayout v-if="isShowLayout && !isMobile">
+      <RouterView />
+    </SidebarLayout>
+    <MobileSidebarLayout v-else-if="isShowLayout && isMobile">
+      <RouterView />
+    </MobileSidebarLayout>
+    <RouterView v-else />
+  </div>
 </template>
 <!-- <style src="primevue/resources/themes/lara-light-blue/theme.css"></style> -->
 <style src="./assets/theme.css"></style>

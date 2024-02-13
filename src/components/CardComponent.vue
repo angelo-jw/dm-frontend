@@ -3,7 +3,7 @@ import Card from "primevue/card";
 const props = defineProps({
   height: {
     type: String,
-    default: "h-17rem",
+    default: "h-full",
   },
 });
 </script>

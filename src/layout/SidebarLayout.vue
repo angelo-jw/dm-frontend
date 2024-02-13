@@ -55,6 +55,8 @@ const logout = () => {
 
 <style scoped lang="less">
 .sidebar-layout {
+  overflow: hidden;
+  height: 100vh;
   :deep(.v-sidebar-menu.vsm_collapsed) {
     .footer-wrapper {
       display: none;
@@ -138,49 +140,42 @@ const logout = () => {
 }
 </style>
 <template>
-  <div class="grid grid-nogutter">
-    <div class="sidebar-layout flex h-screen col-2">
-      <SidebarMenu :menu="menu" class="h-full relative">
-        <template v-slot:footer>
-          <div class="footer-wrapper">
-            <div class="flex justify-content-center relative mb-4">
-              <img class="logo" :src="logo1" />
-            </div>
-            <div class="flex justify-content-around align-items-center mb-4">
-              <Avatar
-                image="https://primefaces.org/cdn/primevue/images/avatar/asiyajavayant.png"
-                class="cursor-pointer"
-                size="large"
-                shape="circle"
+  <div class="sidebar-layout flex h-screen w-screen">
+    <SidebarMenu :menu="menu" class="h-full w-full relative">
+      <template v-slot:footer>
+        <div class="footer-wrapper">
+          <div class="flex justify-content-center relative mb-4">
+            <img class="logo" :src="logo1" />
+          </div>
+          <div class="flex justify-content-around align-items-center mb-4">
+            <Avatar
+              image="https://primefaces.org/cdn/primevue/images/avatar/asiyajavayant.png"
+              class="cursor-pointer"
+              size="large"
+              shape="circle"
+            />
+            <div
+              class="flex flex-column cursor-pointer align-items-center"
+              @click="logout"
+            >
+              <font-awesome-icon
+                :icon="['fa', 'right-from-bracket']"
+                class="logout-icon fa-2x"
               />
-              <div
-                class="flex flex-column cursor-pointer align-items-center"
-                @click="logout"
-              >
-                <font-awesome-icon
-                  :icon="['fa', 'right-from-bracket']"
-                  class="logout-icon fa-2x"
-                />
-                <small>{{ t("Logout") }}</small>
-              </div>
-              <div class="flex flex-column cursor-pointer align-items-center">
-                <font-awesome-icon
-                  :icon="['fa', 'circle-question']"
-                  class="fa-2x"
-                />
-                <small class="text-color">{{ t("FAQs") }}</small>
-              </div>
+              <small>{{ t("Logout") }}</small>
+            </div>
+            <div class="flex flex-column cursor-pointer align-items-center">
+              <font-awesome-icon
+                :icon="['fa', 'circle-question']"
+                class="fa-2x"
+              />
+              <small class="text-color">{{ t("FAQs") }}</small>
             </div>
           </div>
-        </template>
-      </SidebarMenu>
-    </div>
-    <div
-      :class="{
-        'col-10 px-3': true,
-        blueBody: route.name == 'dashboard',
-      }"
-    >
+        </div>
+      </template>
+    </SidebarMenu>
+    <div class="w-full overflow-y-auto px-3">
       <slot></slot>
     </div>
   </div>
