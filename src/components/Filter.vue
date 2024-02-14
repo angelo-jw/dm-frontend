@@ -12,6 +12,7 @@ const { t } = useI18n();
 
 const startDate = ref(day().format("YYYY-MM-DD"));
 const endDate = ref("");
+const maxDate = ref(new Date());
 
 const emit = defineEmits(["startEndDate"]);
 
@@ -32,6 +33,7 @@ const filter = () => {
           class="col-12 md:col-5"
           dateFormat="yy-mm-dd"
           :placeholder="t('Start date')"
+          :maxDate="maxDate"
         />
         <Calendar
           v-model="endDate"
@@ -39,6 +41,7 @@ const filter = () => {
           class="col-12 md:col-5"
           dateFormat="yy-mm-dd"
           :placeholder="t('End date')"
+          :maxDate="maxDate"
         />
         <div class="col-12 md:col-2 flex align-items-center">
           <Button
