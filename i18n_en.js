@@ -105,4 +105,16 @@ export default {
   "Total for each activity by month": "Total for each activity by Month",
   "In order to create deposits, you need to have a carrier":
     "In order to create deposits, you need to have a carrier",
+  Activities: "Activities",
+  "Activities Group": "Activities Group",
+  "Activity type deleted successfully": "Activity deleted successfully",
+  "Are you sure to delete activity type":
+    "Are you sure to delete activity type",
+  "Create Activity Type": "Create Activity Type",
+  "Activities type": "Activities type",
+  "Activity Type": "Activity Type",
+  "Activity type created successfully": "Activity type created successfully",
+  "Update Activity Type": "Update Activity Type",
+  "Enter activity type": "Enter activity type",
+  "Activity type": "Activity type",
 };
