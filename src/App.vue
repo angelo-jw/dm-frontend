@@ -22,7 +22,7 @@ const isShowLayout = computed(() => {
 </script>
 
 <template>
-  <div :class="{ blueBody: route.name == 'dashboard' }">
+  <div :class="{ blueBody: route.name == 'dashboard', 'h-full': true }">
     <Toast />
     <SidebarLayout v-if="isShowLayout && !isMobile">
       <RouterView />
