@@ -62,9 +62,9 @@ const chartOptions = ref({
       dataLabels: {
         enabled: true,
         distance: 6,
-        format: "{point.name}:<br/>{point.percentage:.2f} %",
+        format: "<b>{point.name}</b>: ${point.y:.1f}",
         style: {
-          fontSize: "8px",
+          fontSize: "12px",
           fontWeight: "500",
         },
         filter: {
