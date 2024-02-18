@@ -108,6 +108,7 @@ const getTotalSalesData = async () => {
     isLoading.value = true;
     const res = await dashboardService.getActivityCountPerMonth(result);
     const convertDataToArray = Object.values(res.data);
+    let total = 0;
     if (convertDataToArray.length) {
       convertDataToArray.forEach((chartItems) => {
         const keys = Object.keys(chartItems);
@@ -119,15 +120,21 @@ const getTotalSalesData = async () => {
               name: key,
               data: [values[index]],
             };
+            total = total + values[index];
           } else {
             chartData[key] = {
               name: key,
               data: [...chartData[key].data, values[index]],
             };
+            total = total + values[index];
           }
         });
       });
       chartOptions.value.series = Object.values(chartData);
+      chartOptions.value.subtitle = {
+        ...chartOptions.value.subtitle,
+        text: `${t("Total")}:${total}`,
+      };
     }
   } catch (err) {
     toast.add({

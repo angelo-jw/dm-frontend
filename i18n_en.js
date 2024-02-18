@@ -106,4 +106,5 @@ export default {
   "In order to create deposits, you need to have a carrier":
     "In order to create deposits, you need to have a carrier",
   Activities: "Activities",
+  "Quantity is required": "Quantity is required",
 };
