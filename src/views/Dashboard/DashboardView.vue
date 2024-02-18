@@ -24,18 +24,18 @@ const getStartEndDate = (event) => {
 
 <template>
   <div class="h-full">
-    <h1 class="uppercase text-color font-bold text-center mt-5 mb-2">
+    <h1 class="uppercase text-color font-bold text-center md:mt-5 mb-2">
       {{ t("Dashboard") }}
     </h1>
     <Filter @onStartEndDate="getStartEndDate" />
     <div class="grid">
-      <div class="col-12 md:col-3">
+      <!-- <div class="col-12 md:col-3">
         <ActivitiesToTrack />
-      </div>
-      <div class="col-12 md:col-3">
+      </div> -->
+      <div class="col-12 md:col-5">
         <PerActivity :date="{ startDate, endDate }" />
       </div>
-      <div class="col-12 md:col-6">
+      <div class="col-12 md:col-7">
         <SalesDayByWeek />
       </div>
       <div class="col-12 md:col-12">

@@ -31,6 +31,8 @@ const activitiesOption = [
   { text: t("Dials"), value: "dials" },
   { text: t("DoorKnocks"), value: "doorknocks" },
   { text: t("Appointments"), value: "appointments" },
+  { text: t("Recruiting interviews"), value: "recruiting_interviews" },
+  { text: t("Presentations"), value: "presentations" },
 ];
 
 const form = ref({

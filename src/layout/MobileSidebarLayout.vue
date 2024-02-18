@@ -88,6 +88,8 @@ const logout = () => {
     >
       <slot></slot>
     </div>
-    <MobileMenu class="absolute bottom-0 w-full" :items="menuItems" />
+    <div class="h-4rem">
+      <MobileMenu class="absolute bottom-0 w-full" :items="menuItems" />
+    </div>
   </div>
 </template>

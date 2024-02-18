@@ -26,10 +26,11 @@ const isLoading = ref();
 const chartOptions = ref({
   chart: {
     type: "pie",
-    height: 200,
+    height: 280,
+    width: 400,
   },
   title: {
-    text: t("Per activity"),
+    text: t("Activity"),
     style: {
       fontWeight: "bold",
       color: "#4b5563",
@@ -62,7 +63,7 @@ const chartOptions = ref({
       dataLabels: {
         enabled: true,
         distance: 6,
-        format: "<b>{point.name}</b>: ${point.y:.1f}",
+        format: "<b>{point.name}</b>: {point.y:.1f}",
         style: {
           fontSize: "12px",
           fontWeight: "500",
@@ -138,7 +139,7 @@ const getPerActivityData = async () => {
         y: res.data?.presentations || 0,
       },
       {
-        name: "Recruiting interview",
+        name: "Recruiting interviews",
         y: res.data?.recruiting_interview || 0,
       },
     ];
@@ -187,7 +188,7 @@ onMounted(() => {
     <template #content>
       <div class="h-full">
         <h2 class="font-bold uppercase" v-if="isLoading || !total">
-          {{ t("Per activity") }}
+          {{ t("Activity") }}
         </h2>
         <div
           v-if="isLoading"

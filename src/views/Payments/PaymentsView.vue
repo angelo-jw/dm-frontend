@@ -34,7 +34,7 @@ const isLoading = ref(false);
 
 const tableData = ref({
   content: [],
-  rows: 1,
+  rows: 10,
   rowsPerPagination: [10, 20, 50],
 });
 
@@ -45,7 +45,7 @@ const getPage = async (paginationOptions) => {
   const result = "?" + new URLSearchParams(paginationOptions).toString();
   try {
     const res = await paymentsService.getPayments(result);
-    tableData.value.content = res.data.payments.map((payment) => {
+    tableData.value.content = res.data.deposits.map((payment) => {
       const {
         created_time,
         amount,
