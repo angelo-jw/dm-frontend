@@ -100,9 +100,10 @@ export default {
   "Deposit updated successfully": "Deposit updated successfully",
   Yes: "Yes",
   No: "No",
-  "Recruiting interview": "Recruiting interview",
+  "Recruiting interviews": "Recruiting interviews",
   "No activities": "No activities",
   "Total for each activity by month": "Total for each activity by Month",
   "In order to create deposits, you need to have a carrier":
     "In order to create deposits, you need to have a carrier",
+  Activities: "Activities",
 };

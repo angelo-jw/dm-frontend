@@ -165,6 +165,7 @@ const getCarriers = () => {
             id="amount"
             v-model="formData.amount"
             class="w-8 md:w-full"
+            type="number"
           />
           <h5 class="text-red-50 m-0" v-if="v$.amount.$error">
             {{ t("Amount is required") }}
