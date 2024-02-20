@@ -36,7 +36,7 @@ const getStartEndDate = (event) => {
         <PerActivity :date="{ startDate, endDate }" />
       </div>
       <div class="col-12 md:col-7">
-        <SalesDayByWeek />
+        <SalesDayByWeek :date="{ startDate, endDate }" />
       </div>
       <div class="col-12 md:col-12">
         <TotalSales :date="{ startDate, endDate }" />

@@ -11,12 +11,14 @@ import highchartsMore from "highcharts/highcharts-more";
 import { useDashboardService } from "../../services/DashboardService";
 
 import Skeleton from "primevue/skeleton";
+import { useToast } from "primevue/usetoast";
 
 import day from "dayjs";
 
 highchartsMore(Highcharts);
 
 const { t } = useI18n();
+const toast = useToast();
 
 const props = defineProps({
   date: {
@@ -133,8 +135,8 @@ const getTotalSalesData = async () => {
     toast.add({
       severity: "error",
       detail:
-        response?.data?.message ||
-        `${t("There was an error creating your account, please try again")}.`,
+        err?.response?.data?.message ||
+        `${t("There was an error, please try again")}.`,
       sticky: true,
       styleClass: "error",
       closable: false,

@@ -6,8 +6,12 @@ export function useDashboardService() {
   const getActivityCountPerMonth = (options) => {
     return http.get(`get-activity-count-per-month${options}`);
   };
+  const getSalesByWeekDay = (options) => {
+    return http.get(`get-sales-by-weekday${options}`);
+  };
   return {
     getActivityCount,
     getActivityCountPerMonth,
+    getSalesByWeekDay,
   };
 }
