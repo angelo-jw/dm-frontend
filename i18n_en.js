@@ -106,4 +106,5 @@ export default {
   "In order to create deposits, you need to have a carrier":
     "In order to create deposits, you need to have a carrier",
   Activities: "Activities",
+  "No sales by day of the week": "No sales by day of the week",
 };

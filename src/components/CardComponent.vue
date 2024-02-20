@@ -10,6 +10,7 @@ const props = defineProps({
 
 <style lang="less" scoped>
 .card-component {
+  min-height: 18rem;
   :deep(.p-card-body) {
     height: 100%;
     .p-card-content {

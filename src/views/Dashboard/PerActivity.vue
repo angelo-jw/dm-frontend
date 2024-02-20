@@ -5,6 +5,7 @@ import { useI18n } from "vue-i18n";
 import CardComponent from "../../components/CardComponent.vue";
 
 import Skeleton from "primevue/skeleton";
+import { useToast } from "primevue/usetoast";
 
 import { Chart } from "highcharts-vue";
 
@@ -18,7 +19,9 @@ const props = defineProps({
     default: () => ({ startDate: day().format("YYYY-MM-DD"), endDate: "" }),
   },
 });
+
 const { t } = useI18n();
+const toast = useToast();
 const dashboardService = useDashboardService();
 
 const total = ref(0);
@@ -156,8 +159,8 @@ const getPerActivityData = async () => {
     toast.add({
       severity: "error",
       detail:
-        response?.data?.message ||
-        `${t("There was an error creating your account, please try again")}.`,
+        err?.response?.data?.message ||
+        `${t("There was an error, please try again")}.`,
       sticky: true,
       styleClass: "error",
       closable: false,
