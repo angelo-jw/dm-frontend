@@ -7,19 +7,18 @@ import DataTable from "primevue/datatable";
 import Column from "primevue/column"; // optional
 import Row from "primevue/row";
 
-import CreateActivity from "./CreateActivitiy.vue";
-import Filter from "../../components/Filter.vue";
+import CreateActivitiyType from "./CreateActivitiyType.vue";
 
 import { useToast } from "primevue/usetoast";
 import Toast from "primevue/toast";
 
-import { useCarrierService } from "../../services/CarrierService";
+import { useActivitiesService } from "../../services/ActivitiesService";
 
 import day from "dayjs";
 
 const { t } = useI18n();
 const toast = useToast();
-const carrierService = useCarrierService();
+const activitiesService = useActivitiesService();
 
 let startDate = day().format("YYYY-MM-DD");
 let endDate = "";
@@ -41,13 +40,13 @@ const currentRowData = ref({});
 const getPage = async (paginationOptions) => {
   const result = "?" + new URLSearchParams(paginationOptions).toString();
   try {
-    const res = await carrierService.getCarriers(result);
-    tableData.value.content = res.data.carriers.map((carrier) => {
-      const { id, notes, carrier_name } = carrier;
+    const res = await activitiesService.getActivitiesType(result);
+    tableData.value.content = res.data.activity_types.map((activityType) => {
+      const { id, name, duration } = activityType;
       return {
         id,
-        notes,
-        carrierName: carrier_name,
+        activityType: name,
+        duration,
       };
     });
   } catch (err) {
@@ -73,12 +72,10 @@ const onPageChange = async (paginationData) => {
 
 const deleteCarrier = async (id, closeCallback) => {
   try {
-    await carrierService.deleteCarrier(id);
+    await activitiesService.deleteActivityType(id);
     getPage({
       page: 0,
       per_page: 10,
-      last_doc_id: null,
-      start_date: day().format("YYYY-MM-DD"),
     });
     closeCallback();
     toast.add({
@@ -125,7 +122,7 @@ const showDeleteAlert = (data) => {
   toast.add({
     severity: "custom",
     summary: t("Are you sure to delete activity type", {
-      name: data.carrierName,
+      name: data.activityType,
     }),
     group: "headless",
   });
@@ -154,7 +151,6 @@ onMounted(() => {
     <h1 class="uppercase text-color font-bold text-center mt-5 mb-2">
       {{ t("Activities type") }}
     </h1>
-    <Filter @onStartEndDate="getStartEndDate" />
     <DataTable
       :value="tableData.content"
       paginator
@@ -180,7 +176,8 @@ onMounted(() => {
         class="w-1 text-sm"
       >
       </Column>
-      <Column field="date" :header="t('Date')" class="w-1 text-sm"> </Column>
+      <Column field="duration" :header="t('Duration')" class="w-1 text-sm">
+      </Column>
       <Column field="actions" :header="t('Actions')" class="w-1 text-sm">
         <template #body="{ data }">
           <div>
@@ -232,7 +229,7 @@ onMounted(() => {
         </template>
       </Column>
     </DataTable>
-    <CreateActivity
+    <CreateActivitiyType
       :visible="visible"
       :currentRowData="currentRowData"
       @onChangeVisibleState="visible = $event"

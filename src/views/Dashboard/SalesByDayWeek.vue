@@ -167,7 +167,7 @@ onMounted(() => {
           v-if="isLoading"
           class="flex justify-content-center align-items-center flex-column mt-4"
         >
-          <Skeleton class="" shape="circle" size="8rem"></Skeleton>
+          <Skeleton class="w-full h-10rem"></Skeleton>
         </div>
         <h4 class="mt-4 text-center" v-else-if="!isLoading && !total">
           {{ t("No sales by day of the week") }}

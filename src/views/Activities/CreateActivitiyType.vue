@@ -10,10 +10,10 @@ import Textarea from "primevue/textarea";
 
 import CustomDialog from "../../components/CustomDialog.vue";
 
-import { required } from "../../../node_modules/@vuelidate/validators";
-import { useVuelidate } from "../../../node_modules/@vuelidate/core";
+import { required } from "@vuelidate/validators";
+import { useVuelidate } from "@vuelidate/core";
 
-import { useCarrierService } from "../../services/CarrierService";
+import { useActivitiesService } from "../../services/ActivitiesService";
 
 import day from "dayjs";
 const props = defineProps({
@@ -30,19 +30,22 @@ const props = defineProps({
 const emit = defineEmits(["onGetPage", "onChangeVisibleState"]);
 
 const { t } = useI18n();
-const carrierService = useCarrierService();
+const activitiesService = useActivitiesService();
 const toast = useToast();
 
 const carrierOptions = [];
 
 const formData = reactive({
-  carrierName: "",
-  notes: "",
+  name: "",
+  duration: "",
 });
 const isLoading = ref(false);
 
 const rules = {
-  carrierName: {
+  name: {
+    required,
+  },
+  duration: {
     required,
   },
 };
@@ -57,14 +60,12 @@ const onSubmit = async (e) => {
     try {
       isLoading.value = true;
       if (props.currentRowData?.id) {
-        await carrierService.updateCarrier(props.currentRowData.id, {
-          carrier_name: formData.carrierName,
-          notes: formData.notes,
+        await activitiesService.putActivityType(props.currentRowData.id, {
+          ...formData,
         });
       } else {
-        await carrierService.createCarrier({
-          carrier_name: formData.carrierName,
-          notes: formData.notes,
+        await activitiesService.createActivityType({
+          ...formData,
         });
       }
       emit("onChangeVisibleState", false);
@@ -100,9 +101,9 @@ const onSubmit = async (e) => {
   }
 };
 const visibleDialog = () => {
-  const { carrierName, notes } = props.currentRowData;
-  formData.carrierName = carrierName;
-  formData.notes = notes;
+  const { activityType, duration } = props.currentRowData;
+  formData.name = activityType;
+  formData.duration = duration;
 };
 </script>
 
@@ -116,32 +117,41 @@ const visibleDialog = () => {
     <form @submit="onSubmit">
       <div class="w-full" v-if="isLoading">
         <Skeleton height="3rem" class="mb-2 w-full"></Skeleton>
+        <Skeleton height="4rem" class="mb-2 w-full"></Skeleton>
       </div>
       <div v-else>
         <div class="mb-1">
           <label for="activityType">{{ t("Activity type") }}</label>
           <InputText
             id="activityType"
-            v-model="formData.carrierName"
+            v-model="formData.name"
             class="w-8 md:w-full"
             :placeholder="t('Enter activity type')"
           />
-          <h5 class="text-red-50 m-0" v-if="v$.carrierName.$error">
+          <h5 class="text-red-50 m-0" v-if="v$.name.$error">
             {{ t("Activity type is required") }}
+          </h5>
+        </div>
+        <div class="mb-1">
+          <label for="duration">{{ t("Duration") }}</label>
+          <InputText
+            id="activityType"
+            v-model="formData.duration"
+            class="w-8 md:w-full"
+            type="number"
+            placeholder="0"
+          />
+          <h5 class="text-red-50 m-0" v-if="v$.duration.$error">
+            {{ t("Duration is required") }}
           </h5>
         </div>
       </div>
       <div class="flex justify-content-center">
-        <Button
-          type="submit"
-          class="h-2rem mt-2"
-          :disabled="isLoading || !result"
-          >{{
-            props.currentRowData?.carrierName
-              ? t("Create Activity Type")
-              : t("Update Activity Type")
-          }}</Button
-        >
+        <Button type="submit" class="h-2rem mt-2" :disabled="isLoading">{{
+          props.currentRowData?.id
+            ? t("Update Activity Type")
+            : t("Create Activity Type")
+        }}</Button>
       </div>
     </form>
   </CustomDialog>
