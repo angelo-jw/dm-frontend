@@ -30,7 +30,7 @@ const filter = () => {
         <Calendar
           v-model="startDate"
           showIcon
-          class="col-12 md:col-5"
+          class="col-12 md:col-5 h-3rem md:h-full"
           dateFormat="yy-mm-dd"
           :placeholder="t('Start date')"
           :maxDate="maxDate"
@@ -38,7 +38,7 @@ const filter = () => {
         <Calendar
           v-model="endDate"
           showIcon
-          class="col-12 md:col-5"
+          class="col-12 md:col-5 h-3rem md:h-full"
           dateFormat="yy-mm-dd"
           :placeholder="t('End date')"
           :maxDate="maxDate"
@@ -46,7 +46,7 @@ const filter = () => {
         <div class="col-12 md:col-2 flex align-items-center">
           <Button
             icon="pi pi-filter-fill"
-            class="h-3rem w-full"
+            class="w-full h-2rem md:h-3rem"
             :label="t('Filter')"
             @click="filter"
           />

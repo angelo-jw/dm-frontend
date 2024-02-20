@@ -5,6 +5,7 @@ import { useI18n } from "vue-i18n";
 import CardComponent from "../../components/CardComponent.vue";
 
 import Skeleton from "primevue/skeleton";
+import { useToast } from "primevue/usetoast";
 
 import { Chart } from "highcharts-vue";
 
@@ -18,7 +19,9 @@ const props = defineProps({
     default: () => ({ startDate: day().format("YYYY-MM-DD"), endDate: "" }),
   },
 });
+
 const { t } = useI18n();
+const toast = useToast();
 const dashboardService = useDashboardService();
 
 const total = ref(0);
@@ -26,10 +29,11 @@ const isLoading = ref();
 const chartOptions = ref({
   chart: {
     type: "pie",
-    height: 200,
+    height: 280,
+    width: 400,
   },
   title: {
-    text: t("Per activity"),
+    text: t("Activity"),
     style: {
       fontWeight: "bold",
       color: "#4b5563",
@@ -62,9 +66,9 @@ const chartOptions = ref({
       dataLabels: {
         enabled: true,
         distance: 6,
-        format: "{point.name}:<br/>{point.percentage:.2f} %",
+        format: "<b>{point.name}</b>: {point.y:.1f}",
         style: {
-          fontSize: "8px",
+          fontSize: "12px",
           fontWeight: "500",
         },
         filter: {
@@ -138,7 +142,7 @@ const getPerActivityData = async () => {
         y: res.data?.presentations || 0,
       },
       {
-        name: "Recruiting interview",
+        name: "Recruiting interviews",
         y: res.data?.recruiting_interview || 0,
       },
     ];
@@ -155,8 +159,8 @@ const getPerActivityData = async () => {
     toast.add({
       severity: "error",
       detail:
-        response?.data?.message ||
-        `${t("There was an error creating your account, please try again")}.`,
+        err?.response?.data?.message ||
+        `${t("There was an error, please try again")}.`,
       sticky: true,
       styleClass: "error",
       closable: false,
@@ -187,7 +191,7 @@ onMounted(() => {
     <template #content>
       <div class="h-full">
         <h2 class="font-bold uppercase" v-if="isLoading || !total">
-          {{ t("Per activity") }}
+          {{ t("Activity") }}
         </h2>
         <div
           v-if="isLoading"

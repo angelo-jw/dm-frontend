@@ -15,7 +15,7 @@ const { t } = useI18n();
       <h4 class="mb-2">2. {{ t("DoorKnocks") }}</h4>
       <h4 class="mb-2">3. {{ t("Appointments") }}</h4>
       <h4 class="mb-2">4. {{ t("Presentations") }}</h4>
-      <h4>5. {{ t("Recruiting interview") }}</h4>
+      <h4>5. {{ t("Recruiting interviews") }}</h4>
     </template>
   </CardComponent>
 </template>

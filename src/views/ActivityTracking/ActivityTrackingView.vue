@@ -50,7 +50,7 @@ const activitiesOption = ref([
   { text: t("DoorKnocks"), value: "doorknocks" },
   { text: t("Appointments"), value: "appointments" },
   { text: t("Presentations"), value: "presentations" },
-  { text: t("Recruiting interview"), value: "recruiting_interview" },
+  { text: t("Recruiting interviews"), value: "recruiting_interview" },
 ]);
 const tableData = ref({
   content: [],
@@ -118,12 +118,15 @@ const increaseQuantity = (index) => {
 };
 const decreaseQuantity = (index) => {
   const currentRowData = { ...tableData.value.content[index] };
-  oldRowData = currentRowData;
-  tableData.value.content.splice(index, 1, {
-    ...currentRowData,
-    quantity: currentRowData.quantity - 1,
-  });
-  updateActivity(index);
+
+  if (currentRowData.quantity >= 0) {
+    oldRowData = currentRowData;
+    tableData.value.content.splice(index, 1, {
+      ...currentRowData,
+      quantity: currentRowData.quantity - 1,
+    });
+    updateActivity(index);
+  }
 };
 
 const updateActivity = async (index) => {

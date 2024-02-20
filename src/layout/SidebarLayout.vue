@@ -164,7 +164,7 @@ const logout = () => {
 </style>
 <template>
   <div class="sidebar-layout flex h-screen w-screen">
-    <SidebarMenu :menu="menu" class="h-full w-full relative">
+    <SidebarMenu :menu="menu" class="h-full w-full relative" :collapsed="true">
       <template v-slot:footer>
         <div class="footer-wrapper">
           <div class="flex justify-content-center relative mb-4">

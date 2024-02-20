@@ -179,7 +179,7 @@ onMounted(() => {
         <template #body="{ data }">
           <div>
             <i
-              class="pi pi-pencil mr-2 cursor-pointer"
+              class="pi pi-pencil mr-3 cursor-pointer"
               @click="editRow(data)"
             ></i>
             <i

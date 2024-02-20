@@ -14,15 +14,18 @@ const helper = useHelper();
 const isMobile = helper.isMobile();
 
 const isShowLayout = computed(() => {
-  if (route.name == "sign-in" || route.name == "sign-up") {
-    return false;
+  if (route?.name) {
+    if (route.name == "sign-in" || route.name == "sign-up") {
+      return false;
+    }
+    return true;
   }
-  return true;
+  return null;
 });
 </script>
 
 <template>
-  <div :class="{ blueBody: route.name == 'dashboard' }">
+  <div :class="{ blueBody: route.name == 'dashboard', 'h-full': true }">
     <Toast />
     <SidebarLayout v-if="isShowLayout && !isMobile">
       <RouterView />
