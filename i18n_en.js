@@ -107,4 +107,15 @@ export default {
     "In order to create deposits, you need to have a carrier",
   Activities: "Activities",
   "No sales by day of the week": "No sales by day of the week",
+  "Duration is required": "Duration is required",
+  "Create Activity Type": "Create Activity Type",
+  "Update Activity Type": "Update Activity Type",
+  "Activities Group": "Activities Group",
+  "Activities type": "Activities type",
+  "Activity type": "Activity type",
+  Duration: "Duration",
+  "Activity Type": "Activity Type",
+  "Enter activity type": "Enter activity type",
+  "Are you sure to delete activity type":
+    "Are you sure to delete activity type {name}",
 };

@@ -14,10 +14,13 @@ import CreateActivities from "./CreateActivities.vue";
 import Filter from "../../components/Filter.vue";
 
 import { useActivityTracker } from "../../services/ActivityTrackerService";
+import { useActivitiesService } from "../../services/ActivitiesService";
 
 import { useToast } from "primevue/usetoast";
 
 import day from "dayjs";
+
+const activitiesService = useActivitiesService();
 
 let oldRowData = {};
 let startDate = day().format("YYYY-MM-DD");
@@ -45,12 +48,12 @@ const columns = ref([
   },
 ]);
 const activeRow = ref("");
-const activitiesOption = ref([
-  { text: t("Dials"), value: "dials" },
-  { text: t("DoorKnocks"), value: "doorknocks" },
-  { text: t("Appointments"), value: "appointments" },
-  { text: t("Presentations"), value: "presentations" },
-  { text: t("Recruiting interviews"), value: "recruiting_interview" },
+const activitiesTypeOptions = ref([
+  { text: t("Dials"), value: "Dials" },
+  { text: t("DoorKnocks"), value: "DoorKnocks" },
+  { text: t("Appointments"), value: "Appointments" },
+  { text: t("Presentations"), value: "Presentations" },
+  { text: t("Recruiting interviews"), value: "Recruiting interviews" },
 ]);
 const tableData = ref({
   content: [],
@@ -172,8 +175,40 @@ const getStartEndDate = (event) => {
     end_date: endDate,
   });
 };
-onMounted(() => {
+
+const getActivitiesTypeOptions = async () => {
+  try {
+    const res = await activitiesService.getActivitiesType();
+    if (res.data?.activity_types?.length) {
+      const activityTypes = res.data.activity_types.map((activityType) => {
+        const { id, name } = activityType;
+        return {
+          text: name,
+          value: name,
+        };
+      });
+      activitiesTypeOptions.value = [
+        ...activitiesTypeOptions.value,
+        ...activityTypes,
+      ];
+    }
+  } catch (err) {
+    if (err.response) {
+      toast.add({
+        severity: "error",
+        detail: t(err.response?.data?.message),
+        sticky: true,
+        styleClass: "error",
+        closable: false,
+        life: 3000,
+      });
+    }
+  }
+};
+
+onMounted(async () => {
   isLoading.value = true;
+  await getActivitiesTypeOptions();
   getPage({
     page: 0,
     per_page: 10,
@@ -249,6 +284,7 @@ onMounted(() => {
     </DataTable>
     <CreateActivities
       :visible="visible"
+      :activitiesTypeOptions="activitiesTypeOptions"
       @onChangeVisibleState="visible = $event"
       @onGetPage="getPage($event)"
     />
