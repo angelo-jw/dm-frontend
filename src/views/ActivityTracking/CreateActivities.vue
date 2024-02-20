@@ -22,6 +22,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  activitiesTypeOptions: {
+    type: Array,
+    default: () => [],
+  },
 });
 
 const emit = defineEmits(["onGetPage", "onChangeVisibleState"]);
@@ -30,18 +34,12 @@ const { t } = useI18n();
 const activityTracker = useActivityTracker();
 const toast = useToast();
 
-const activitiesOption = [
-  { text: t("Dials"), value: "dials" },
-  { text: t("DoorKnocks"), value: "doorknocks" },
-  { text: t("Appointments"), value: "appointments" },
-  { text: t("Recruiting interviews"), value: "recruiting_interviews" },
-  { text: t("Presentations"), value: "presentations" },
-];
-
-const form = reactive({
+const form = ref({
   date: day().format("YYYY-MM-DD"),
-  activity: activitiesOption[0],
-  quantity: null,
+  activity: props.activitiesTypeOptions.length
+    ? props.activitiesTypeOptions[0]
+    : null,
+  quantity: 0,
 });
 const rules = {
   quantity: {
@@ -112,7 +110,7 @@ const onSubmit = async (e) => {
           v-model="form.activity"
           class="w-full mb-3"
           optionLabel="text"
-          :options="activitiesOption"
+          :options="props.activitiesTypeOptions"
           :placeholder="t('Select activity')"
         />
         <div class="mb-3">

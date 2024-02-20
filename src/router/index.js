@@ -19,6 +19,11 @@ const router = createRouter({
       component: () => import("../views/RegisterView.vue"),
     },
     {
+      path: "/activities",
+      name: "activities",
+      component: () => import("../views/Activities/ActivitiesView.vue"),
+    },
+    {
       path: "/activity-tracking",
       name: "activity-tracking",
       component: () =>
