@@ -118,4 +118,5 @@ export default {
   "Enter activity type": "Enter activity type",
   "Are you sure to delete activity type":
     "Are you sure to delete activity type {name}",
+  Custom: "Create Custom",
 };
