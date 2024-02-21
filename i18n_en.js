@@ -119,4 +119,5 @@ export default {
   "Are you sure to delete activity type":
     "Are you sure to delete activity type {name}",
   Custom: "Create Custom",
+  "Activity deleted successfully": "Activity deleted successfully",
 };

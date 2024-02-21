@@ -31,6 +31,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  currentRowData: {
+    type: Object,
+    default: () => ({}),
+  },
 });
 
 const emit = defineEmits([
@@ -64,7 +68,12 @@ const isLoading = ref(props.isLoadingActivitiesModal);
 const onChangeOption = (event) => {
   if (event.value.text == "Create Custom") {
     isCreateActivityTypeVisible.value = true;
-    form.value.activity = props.activitiesTypeOptions[1];
+    form.value.activity = props.currentRowData?.id
+      ? {
+          text: props.currentRowData?.activity,
+          value: props.currentRowData?.activity,
+        }
+      : props.activitiesTypeOptions[1];
   }
 };
 
@@ -72,25 +81,35 @@ const onSubmit = async (e) => {
   e.preventDefault();
   result.value = await v$.value.$validate();
   if (result.value) {
-    const newRowData = {
-      id: null,
-      created_time: day(form.date).format("YYYY-MM-DD"),
-      activity_type: form.activity.value,
-      quantity: form.quantity,
+    const activityData = {
+      created_time: day(form.value.date).format("YYYY-MM-DD"),
+      activity_type: form.value.activity?.value,
+      quantity: form.value?.quantity,
     };
     try {
       isLoading.value = true;
-      await activityTracker.postActivities(newRowData);
+      if (props.currentRowData?.id) {
+        await activityTracker.putActivity(
+          props.currentRowData?.id,
+          activityData
+        );
+      } else {
+        await activityTracker.postActivities({ ...activityData, id: null });
+      }
+
       emit("onGetPage", {
         page: 0,
         per_page: 10,
         last_doc_id: null,
         start_date: day().format("YYYY-MM-DD"),
       });
+      emit("onChangeVisibleState", false);
     } catch (err) {
       toast.add({
         severity: "error",
-        detail: `${t(err.response?.data?.message)}.`,
+        detail:
+          err?.response?.data?.message ||
+          `${t("There was an error, please try again")}.`,
         sticky: true,
         styleClass: "error",
         closable: false,
@@ -98,8 +117,30 @@ const onSubmit = async (e) => {
       });
     } finally {
       isLoading.value = false;
-      emit("onChangeVisibleState", false);
     }
+  }
+};
+
+const addDefaultFormData = () => {
+  if (props.currentRowData?.id) {
+    const { id, activity, date, quantity } = props.currentRowData;
+    form.value = {
+      id,
+      activity: {
+        text: activity,
+        value: activity,
+      },
+      date,
+      quantity,
+    };
+  } else {
+    form.value = {
+      date: day().format("YYYY-MM-DD"),
+      activity: props.activitiesTypeOptions.length
+        ? props.activitiesTypeOptions[1]
+        : null,
+      quantity: 0,
+    };
   }
 };
 </script>
@@ -108,8 +149,9 @@ const onSubmit = async (e) => {
   <CustomDialog
     :visible="props.visible"
     customClass="create-activities"
-    :header="t('Create activity')"
+    :header="props.currentRow?.id ? t('Update activity') : t('Create activity')"
     @onChangeVisibleState="emit('onChangeVisibleState', false)"
+    @show="addDefaultFormData"
   >
     <form @submit="onSubmit">
       <div class="w-full" v-if="isLoading">
@@ -156,7 +198,7 @@ const onSubmit = async (e) => {
       </div>
       <div class="flex justify-content-center">
         <Button type="submit" class="h-2rem" :disabled="isLoading">{{
-          t("Create")
+          props.currentRowData.id ? t("Update") : t("Create")
         }}</Button>
       </div>
     </form>
