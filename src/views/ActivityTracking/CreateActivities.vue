@@ -10,6 +10,7 @@ import { useToast } from "primevue/usetoast";
 import Skeleton from "primevue/skeleton";
 
 import CustomDialog from "../../components/CustomDialog.vue";
+import CreateActivitiyType from "../Activities/CreateActivitiyType.vue";
 
 import { useActivityTracker } from "../../services/ActivityTrackerService";
 
@@ -26,18 +27,27 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
+  isLoadingActivitiesModal: {
+    type: Boolean,
+    default: false,
+  },
 });
 
-const emit = defineEmits(["onGetPage", "onChangeVisibleState"]);
+const emit = defineEmits([
+  "onGetPage",
+  "onChangeVisibleState",
+  "onGetActivitiesTypeOptions",
+]);
 
 const { t } = useI18n();
 const activityTracker = useActivityTracker();
 const toast = useToast();
 
+const isCreateActivityTypeVisible = ref(false);
 const form = ref({
   date: day().format("YYYY-MM-DD"),
   activity: props.activitiesTypeOptions.length
-    ? props.activitiesTypeOptions[0]
+    ? props.activitiesTypeOptions[1]
     : null,
   quantity: 0,
 });
@@ -48,9 +58,16 @@ const rules = {
 };
 const result = ref(false);
 const v$ = useVuelidate(rules, form);
-const isLoading = ref(false);
+const isLoading = ref(props.isLoadingActivitiesModal);
 
 //METHODS
+const onChangeOption = (event) => {
+  if (event.value.text == "Create Custom") {
+    isCreateActivityTypeVisible.value = true;
+    form.value.activity = props.activitiesTypeOptions[1];
+  }
+};
+
 const onSubmit = async (e) => {
   e.preventDefault();
   result.value = await v$.value.$validate();
@@ -112,7 +129,18 @@ const onSubmit = async (e) => {
           optionLabel="text"
           :options="props.activitiesTypeOptions"
           :placeholder="t('Select activity')"
-        />
+          @change="onChangeOption"
+        >
+          <template #option="slotProps">
+            <h4
+              v-if="slotProps.option.text == 'Create Custom'"
+              class="font-semibold text-color"
+            >
+              {{ slotProps.option.text }}
+            </h4>
+            <h4 v-else>{{ slotProps.option.text }}</h4>
+          </template>
+        </Dropdown>
         <div class="mb-3">
           <InputText
             id="quantity"
@@ -133,4 +161,10 @@ const onSubmit = async (e) => {
       </div>
     </form>
   </CustomDialog>
+  <CreateActivitiyType
+    :visible="isCreateActivityTypeVisible"
+    @onChangeVisibleState="isCreateActivityTypeVisible = $event"
+    @onLoading="isLoading = $event"
+    @onGetPage="emit('onGetActivitiesTypeOptions')"
+  />
 </template>

@@ -104,6 +104,7 @@ const visibleDialog = () => {
   const { activityType, duration } = props.currentRowData;
   formData.name = activityType;
   formData.duration = duration;
+  v$.value.$reset();
 };
 </script>
 

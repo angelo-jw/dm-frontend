@@ -49,6 +49,7 @@ const columns = ref([
 ]);
 const activeRow = ref("");
 const activitiesTypeOptions = ref([
+  { text: t("Custom") },
   { text: t("Dials"), value: "Dials" },
   { text: t("DoorKnocks"), value: "DoorKnocks" },
   { text: t("Appointments"), value: "Appointments" },
@@ -60,6 +61,7 @@ const tableData = ref({
   rows: 10,
   rowsPerPagination: [10, 20, 50],
 });
+const isLoadingActivitiesModal = ref(false);
 
 //METHODS
 const getPage = async (paginationOptions) => {
@@ -178,6 +180,7 @@ const getStartEndDate = (event) => {
 
 const getActivitiesTypeOptions = async () => {
   try {
+    isLoadingActivitiesModal.value = true;
     const res = await activitiesService.getActivitiesType();
     if (res.data?.activity_types?.length) {
       const activityTypes = res.data.activity_types.map((activityType) => {
@@ -203,6 +206,8 @@ const getActivitiesTypeOptions = async () => {
         life: 3000,
       });
     }
+  } finally {
+    isLoadingActivitiesModal.value = false;
   }
 };
 
@@ -283,10 +288,12 @@ onMounted(async () => {
       </Column>
     </DataTable>
     <CreateActivities
+      :isLoadingActivitiesModal="isLoadingActivitiesModal"
       :visible="visible"
       :activitiesTypeOptions="activitiesTypeOptions"
       @onChangeVisibleState="visible = $event"
       @onGetPage="getPage($event)"
+      @onGetActivitiesTypeOptions="getActivitiesTypeOptions"
     />
   </div>
 </template>
