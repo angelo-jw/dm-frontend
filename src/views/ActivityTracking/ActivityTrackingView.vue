@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 import Button from "primevue/button";
@@ -33,6 +33,7 @@ const toast = useToast();
 const visible = ref(false);
 const currentPage = ref(0);
 const isLoading = ref(false);
+const visibleAlert = ref(false);
 const columns = ref([
   {
     field: t("Date"),
@@ -62,6 +63,7 @@ const tableData = ref({
   rowsPerPagination: [10, 20, 50],
 });
 const isLoadingActivitiesModal = ref(false);
+const currentRowData = ref({});
 
 //METHODS
 const getPage = async (paginationOptions) => {
@@ -112,58 +114,6 @@ const outsideClick = (event) => {
     activeRow.value = "";
   }
 };
-const increaseQuantity = (index) => {
-  const currentRowData = { ...tableData.value.content[index] };
-  oldRowData = currentRowData;
-  tableData.value.content.splice(index, 1, {
-    ...currentRowData,
-    quantity: currentRowData.quantity + 1,
-  });
-  updateActivity(index);
-};
-const decreaseQuantity = (index) => {
-  const currentRowData = { ...tableData.value.content[index] };
-
-  if (currentRowData.quantity >= 0) {
-    oldRowData = currentRowData;
-    tableData.value.content.splice(index, 1, {
-      ...currentRowData,
-      quantity: currentRowData.quantity - 1,
-    });
-    updateActivity(index);
-  }
-};
-
-const updateActivity = async (index) => {
-  const updateRow = {
-    activity_type: tableData.value.content[index]?.activity?.value,
-    quantity: tableData.value.content[index]?.quantity,
-    date: tableData.value.content[index]?.date,
-  };
-  try {
-    await activityTracker.putActivity(
-      tableData.value.content[index]?.id,
-      updateRow
-    );
-    getPage({
-      page: 0,
-      per_page: 10,
-      last_doc_id: null,
-      start_date: startDate || day().format("YYYY-MM-DD"),
-      end_date: endDate,
-    });
-  } catch (err) {
-    toast.add({
-      severity: "error",
-      detail: `${t(err.response?.data?.message)}.`,
-      sticky: true,
-      styleClass: "error",
-      closable: false,
-      life: 3000,
-    });
-    tableData.value.content.splice(index, 1, oldRowData);
-  }
-};
 
 const getStartEndDate = (event) => {
   startDate = event.startDate;
@@ -210,6 +160,58 @@ const getActivitiesTypeOptions = async () => {
     isLoadingActivitiesModal.value = false;
   }
 };
+const editRow = (data) => {
+  visible.value = true;
+  currentRowData.value = data;
+};
+
+const showDeleteAlert = (data) => {
+  toast.add({
+    severity: "custom",
+    summary: t("Are you sure to delete", { name: data.activity }),
+    group: "headless",
+  });
+  visibleAlert.value = true;
+};
+
+const deleteActivity = async (id, closeCallback) => {
+  try {
+    await activityTracker.deleteActivity(id);
+    getPage({
+      page: 0,
+      per_page: 10,
+      last_doc_id: null,
+      start_date: day().format("YYYY-MM-DD"),
+    });
+    closeCallback();
+    toast.add({
+      severity: "",
+      summary: "",
+      detail: `${t("Activity deleted successfully")}.`,
+      sticky: true,
+      styleClass: "success",
+      closable: false,
+      life: 5000,
+    });
+  } catch (err) {
+    if (err.response) {
+      toast.add({
+        severity: "error",
+        detail: t(err.response?.data?.message),
+        sticky: true,
+        styleClass: "error",
+        closable: false,
+        life: 3000,
+      });
+    }
+  }
+};
+
+watch(visible, (isVisible) => {
+  if (!isVisible) {
+    currentRowData.value = {};
+  }
+});
 
 onMounted(async () => {
   isLoading.value = true;
@@ -257,37 +259,64 @@ onMounted(async () => {
       <Column field="date" :header="t('Date')" class="w-1 text-sm"> </Column>
       <Column field="activity" :header="t('Activity')" class="w-1 text-sm">
       </Column>
-      <Column field="quantity" :header="t('Quantity')" class="w-1 text-sm">
-        <template #body="{ field, index, data }">
-          <div class="flex align-items-center">
+      <Column
+        field="quantity"
+        :header="t('Quantity')"
+        class="w-1 text-sm"
+      ></Column>
+      <Column field="actions" :header="t('Actions')" class="w-1 text-sm">
+        <template #body="{ data }">
+          <div>
             <i
-              class="pi pi-minus-circle mr-1"
-              style="font-size: 1.3rem"
-              @click="decreaseQuantity(index)"
+              class="pi pi-pencil mr-3 cursor-pointer"
+              @click="editRow(data)"
             ></i>
-            <div v-if="activeRow === `${field}-${index}`" class="rowVal">
-              <InputText
-                id="email"
-                v-model="data.quantity"
-                :placeholder="t('Enter quantity')"
-                class="w-8 md:w-full rowVal"
-                @blur="updateActivity(index)"
-              />
-            </div>
-            <div v-else @click="onCellClick(field, index)" class="rowVal">
-              {{ data.quantity }}
-            </div>
-
             <i
-              class="pi pi-plus-circle ml-1"
-              style="font-size: 1.3rem"
-              @click="increaseQuantity(index)"
+              class="pi pi-trash cursor-pointer"
+              @click="showDeleteAlert(data)"
             ></i>
+            <Toast
+              position="center"
+              group="headless"
+              @close="visibleAlert = false"
+              class="custom-toast"
+            >
+              <template #container="{ message, closeCallback }">
+                <section
+                  class="flex p-3 gap-3 w-full wrapper-section"
+                  style="border-radius: 10px"
+                >
+                  <div
+                    class="flex flex-column gap-3 w-full justify-content-center align-items-center"
+                  >
+                    <p class="m-0 font-semibold text-base text-color">
+                      {{ message.summary }}
+                    </p>
+                    <p class="m-0 text-base text-700">{{ message.detail }}</p>
+                    <div class="flex gap-3 mb-3">
+                      <Button
+                        label="Yes"
+                        text
+                        class="py-1 px-2 primary"
+                        @click="deleteActivity(data?.id, closeCallback)"
+                      ></Button>
+                      <Button
+                        label="No"
+                        text
+                        class="text-white py-1 px-2"
+                        @click="closeCallback"
+                      ></Button>
+                    </div>
+                  </div>
+                </section>
+              </template>
+            </Toast>
           </div>
         </template>
       </Column>
     </DataTable>
     <CreateActivities
+      :currentRowData="currentRowData"
       :isLoadingActivitiesModal="isLoadingActivitiesModal"
       :visible="visible"
       :activitiesTypeOptions="activitiesTypeOptions"
