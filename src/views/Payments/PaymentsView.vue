@@ -106,9 +106,10 @@ const showDeleteAlert = (data) => {
   toast.add({
     severity: "custom",
     summary: t("Are you sure to delete", { name: data.carrierName }),
-    group: "headless",
+    group: "paymentsView",
   });
   visibleAlert.value = true;
+  currentPayment.value = data;
 };
 
 const deletePayment = async (id, closeCallback) => {
@@ -238,46 +239,46 @@ onMounted(async () => {
               class="pi pi-trash cursor-pointer"
               @click="showDeleteAlert(data)"
             ></i>
-            <Toast
-              position="center"
-              group="headless"
-              @close="visibleAlert = false"
-              class="custom-toast"
-            >
-              <template #container="{ message, closeCallback }">
-                <section
-                  class="flex p-3 gap-3 w-full wrapper-section"
-                  style="border-radius: 10px"
-                >
-                  <div
-                    class="flex flex-column gap-3 w-full justify-content-center align-items-center"
-                  >
-                    <p class="m-0 font-semibold text-base text-color">
-                      {{ message.summary }}
-                    </p>
-                    <p class="m-0 text-base text-700">{{ message.detail }}</p>
-                    <div class="flex gap-3 mb-3">
-                      <Button
-                        label="Yes"
-                        text
-                        class="py-1 px-2 primary"
-                        @click="deletePayment(data?.id, closeCallback)"
-                      ></Button>
-                      <Button
-                        label="No"
-                        text
-                        class="text-white py-1 px-2"
-                        @click="closeCallback"
-                      ></Button>
-                    </div>
-                  </div>
-                </section>
-              </template>
-            </Toast>
           </div>
         </template>
       </Column>
     </DataTable>
+    <Toast
+      position="center"
+      group="paymentsView"
+      @close="visibleAlert = false"
+      class="custom-toast"
+    >
+      <template #container="{ message, closeCallback }">
+        <section
+          class="flex p-3 gap-3 w-full wrapper-section"
+          style="border-radius: 10px"
+        >
+          <div
+            class="flex flex-column gap-3 w-full justify-content-center align-items-center"
+          >
+            <p class="m-0 font-semibold text-base text-color">
+              {{ message.summary }}
+            </p>
+            <p class="m-0 text-base text-700">{{ message.detail }}</p>
+            <div class="flex gap-3 mb-3">
+              <Button
+                label="Yes"
+                text
+                class="py-1 px-2 primary"
+                @click="deletePayment(currentPayment?.id, closeCallback)"
+              ></Button>
+              <Button
+                label="No"
+                text
+                class="text-white py-1 px-2"
+                @click="closeCallback"
+              ></Button>
+            </div>
+          </div>
+        </section>
+      </template>
+    </Toast>
     <CreatePayment
       :visible="visible"
       :currentRowData="currentRowData"

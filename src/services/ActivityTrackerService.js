@@ -10,7 +10,7 @@ export function useActivityTracker() {
     return http.put(`/activity/${id}`, data);
   };
   const deleteActivity = (id) => {
-    return http.delete(`/activity/${id}`, data);
+    return http.delete(`/activity/${id}`);
   };
   return {
     getActivities,

@@ -29,6 +29,7 @@ const visibleAlert = ref(false);
 const currentPage = ref(0);
 const isLoading = ref(false);
 const currentRowId = ref(null);
+const currentCarrier = ref({});
 
 const tableData = ref({
   content: [],
@@ -125,9 +126,10 @@ const showDeleteAlert = (data) => {
   toast.add({
     severity: "custom",
     summary: t("Are you sure to delete carrier", { name: data.carrierName }),
-    group: "headless",
+    group: "carrierView",
   });
   visibleAlert.value = true;
+  currentCarrier.value = data;
 };
 
 watch(visible, (isVisible) => {
@@ -186,46 +188,46 @@ onMounted(() => {
               class="pi pi-trash cursor-pointer"
               @click="showDeleteAlert(data)"
             ></i>
-            <Toast
-              position="center"
-              group="headless"
-              @close="visibleAlert = false"
-              class="custom-toast"
-            >
-              <template #container="{ message, closeCallback }">
-                <section
-                  class="flex p-3 gap-3 w-full wrapper-section"
-                  style="border-radius: 10px"
-                >
-                  <div
-                    class="flex flex-column gap-3 w-full justify-content-center align-items-center"
-                  >
-                    <p class="m-0 font-semibold text-base text-color">
-                      {{ message.summary }}
-                    </p>
-                    <p class="m-0 text-base text-700">{{ message.detail }}</p>
-                    <div class="flex gap-3 mb-3">
-                      <Button
-                        label="Yes"
-                        text
-                        class="py-1 px-2 primary"
-                        @click="deleteCarrier(data?.id, closeCallback)"
-                      ></Button>
-                      <Button
-                        label="No"
-                        text
-                        class="text-white py-1 px-2"
-                        @click="closeCallback"
-                      ></Button>
-                    </div>
-                  </div>
-                </section>
-              </template>
-            </Toast>
           </div>
         </template>
       </Column>
     </DataTable>
+    <Toast
+      position="center"
+      group="carrierView"
+      @close="visibleAlert = false"
+      class="custom-toast"
+    >
+      <template #container="{ message, closeCallback }">
+        <section
+          class="flex p-3 gap-3 w-full wrapper-section"
+          style="border-radius: 10px"
+        >
+          <div
+            class="flex flex-column gap-3 w-full justify-content-center align-items-center"
+          >
+            <p class="m-0 font-semibold text-base text-color">
+              {{ message.summary }}
+            </p>
+            <p class="m-0 text-base text-700">{{ message.detail }}</p>
+            <div class="flex gap-3 mb-3">
+              <Button
+                label="Yes"
+                text
+                class="py-1 px-2 primary"
+                @click="deleteCarrier(currentCarrier?.id, closeCallback)"
+              ></Button>
+              <Button
+                label="No"
+                text
+                class="text-white py-1 px-2"
+                @click="closeCallback"
+              ></Button>
+            </div>
+          </div>
+        </section>
+      </template>
+    </Toast>
     <CreateCarrier
       :visible="visible"
       :currentRowData="currentRowData"
