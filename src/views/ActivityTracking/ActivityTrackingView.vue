@@ -17,6 +17,7 @@ import { useActivityTracker } from "../../services/ActivityTrackerService";
 import { useActivitiesService } from "../../services/ActivitiesService";
 
 import { useToast } from "primevue/usetoast";
+import Toast from "primevue/toast";
 
 import day from "dayjs";
 
@@ -62,6 +63,7 @@ const tableData = ref({
   rows: 10,
   rowsPerPagination: [10, 20, 50],
 });
+const currentActivity = ref({});
 const isLoadingActivitiesModal = ref(false);
 const currentRowData = ref({});
 
@@ -169,9 +171,10 @@ const showDeleteAlert = (data) => {
   toast.add({
     severity: "custom",
     summary: t("Are you sure to delete", { name: data.activity }),
-    group: "headless",
+    group: "activityTracking",
   });
   visibleAlert.value = true;
+  currentActivity.value = data;
 };
 
 const deleteActivity = async (id, closeCallback) => {
@@ -194,16 +197,16 @@ const deleteActivity = async (id, closeCallback) => {
       life: 5000,
     });
   } catch (err) {
-    if (err.response) {
-      toast.add({
-        severity: "error",
-        detail: t(err.response?.data?.message),
-        sticky: true,
-        styleClass: "error",
-        closable: false,
-        life: 3000,
-      });
-    }
+    toast.add({
+      severity: "error",
+      detail:
+        err?.response?.data?.message ||
+        `${t("There was an error, please try again")}.`,
+      sticky: true,
+      styleClass: "error",
+      closable: false,
+      life: 3000,
+    });
   }
 };
 
@@ -275,46 +278,46 @@ onMounted(async () => {
               class="pi pi-trash cursor-pointer"
               @click="showDeleteAlert(data)"
             ></i>
-            <Toast
-              position="center"
-              group="headless"
-              @close="visibleAlert = false"
-              class="custom-toast"
-            >
-              <template #container="{ message, closeCallback }">
-                <section
-                  class="flex p-3 gap-3 w-full wrapper-section"
-                  style="border-radius: 10px"
-                >
-                  <div
-                    class="flex flex-column gap-3 w-full justify-content-center align-items-center"
-                  >
-                    <p class="m-0 font-semibold text-base text-color">
-                      {{ message.summary }}
-                    </p>
-                    <p class="m-0 text-base text-700">{{ message.detail }}</p>
-                    <div class="flex gap-3 mb-3">
-                      <Button
-                        label="Yes"
-                        text
-                        class="py-1 px-2 primary"
-                        @click="deleteActivity(data?.id, closeCallback)"
-                      ></Button>
-                      <Button
-                        label="No"
-                        text
-                        class="text-white py-1 px-2"
-                        @click="closeCallback"
-                      ></Button>
-                    </div>
-                  </div>
-                </section>
-              </template>
-            </Toast>
           </div>
         </template>
       </Column>
     </DataTable>
+    <Toast
+      position="center"
+      group="activityTracking"
+      @close="visibleAlert = false"
+      class="custom-toast"
+    >
+      <template #container="{ message, closeCallback }">
+        <section
+          class="flex p-3 gap-3 w-full wrapper-section"
+          style="border-radius: 10px"
+        >
+          <div
+            class="flex flex-column gap-3 w-full justify-content-center align-items-center"
+          >
+            <p class="m-0 font-semibold text-base text-color">
+              {{ message.summary }}
+            </p>
+            <p class="m-0 text-base text-700">{{ message.detail }}</p>
+            <div class="flex gap-3 mb-3">
+              <Button
+                label="Yes"
+                text
+                class="py-1 px-2 primary"
+                @click="deleteActivity(currentActivity?.id, closeCallback)"
+              ></Button>
+              <Button
+                label="No"
+                text
+                class="text-white py-1 px-2"
+                @click="closeCallback"
+              ></Button>
+            </div>
+          </div>
+        </section>
+      </template>
+    </Toast>
     <CreateActivities
       :currentRowData="currentRowData"
       :isLoadingActivitiesModal="isLoadingActivitiesModal"
