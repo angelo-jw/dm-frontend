@@ -1,4 +1,5 @@
 import axios from "axios";
+import router from "./src/router";
 
 const instance = axios.create({
   baseURL: import.meta.env.VITE_APP_API_URL,
@@ -19,7 +20,8 @@ instance.interceptors.response.use(
   },
   function (error) {
     if (error.response?.status == logoutErrorStatus) {
-      router.push({ name: "login" });
+      router.push({ name: "sign-in" });
+      localStorage.setItem("do-more-token", "");
     } else {
       return Promise.reject(error);
     }
