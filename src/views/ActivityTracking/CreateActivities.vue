@@ -23,6 +23,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  currentRowData: {
+    type: Object,
+    default: () => ({}),
+  },
   activitiesTypeOptions: {
     type: Array,
     default: () => [],
@@ -30,10 +34,6 @@ const props = defineProps({
   isLoadingActivitiesModal: {
     type: Boolean,
     default: false,
-  },
-  currentRowData: {
-    type: Object,
-    default: () => ({}),
   },
 });
 
@@ -47,28 +47,27 @@ const { t } = useI18n();
 const activityTracker = useActivityTracker();
 const toast = useToast();
 
-const isCreateActivityTypeVisible = ref(false);
-const form = ref({
+const formData = reactive({
   date: day().format("YYYY-MM-DD"),
-  activity: props.activitiesTypeOptions.length
-    ? props.activitiesTypeOptions[1]
-    : null,
-  quantity: 0,
+  activity: null,
+  quantity: null,
 });
+const isLoading = ref(props.isLoadingActivitiesModal);
+const isCreateActivityTypeVisible = ref(false);
+
 const rules = {
   quantity: {
     required,
   },
 };
-const result = ref(false);
-const v$ = useVuelidate(rules, form);
-const isLoading = ref(props.isLoadingActivitiesModal);
+const v$ = useVuelidate(rules, formData);
+const result = ref(true);
 
 //METHODS
 const onChangeOption = (event) => {
   if (event.value.text == "Create Custom") {
     isCreateActivityTypeVisible.value = true;
-    form.value.activity = props.currentRowData?.id
+    formData.activity = props.currentRowData?.id
       ? {
           text: props.currentRowData?.activity,
           value: props.currentRowData?.activity,
@@ -76,15 +75,14 @@ const onChangeOption = (event) => {
       : props.activitiesTypeOptions[1];
   }
 };
-
 const onSubmit = async (e) => {
   e.preventDefault();
   result.value = await v$.value.$validate();
   if (result.value) {
     const activityData = {
-      created_time: day(form.value.date).format("YYYY-MM-DD"),
-      activity_type: form.value.activity?.value,
-      quantity: form.value?.quantity,
+      created_time: day(formData.date).format("YYYY-MM-DD"),
+      activity_type: formData.activity?.value,
+      quantity: formData?.quantity,
     };
     try {
       isLoading.value = true;
@@ -122,26 +120,10 @@ const onSubmit = async (e) => {
 };
 
 const addDefaultFormData = () => {
-  if (props.currentRowData?.id) {
-    const { id, activity, date, quantity } = props.currentRowData;
-    form.value = {
-      id,
-      activity: {
-        text: activity,
-        value: activity,
-      },
-      date,
-      quantity,
-    };
-  } else {
-    form.value = {
-      date: day().format("YYYY-MM-DD"),
-      activity: props.activitiesTypeOptions.length
-        ? props.activitiesTypeOptions[1]
-        : null,
-      quantity: 0,
-    };
-  }
+  const { activity, date, quantity } = props.currentRowData;
+  formData.activity = activity || props?.activitiesTypeOptions[1];
+  formData.date = day(date).format("YYYY-MM-DD");
+  formData.quantity = quantity || null;
 };
 </script>
 
@@ -161,32 +143,37 @@ const addDefaultFormData = () => {
       </div>
       <div v-else>
         <Calendar
-          v-model="form.date"
+          v-model="formData.date"
           class="w-full mb-3"
           dateFormat="yy-mm-dd"
         />
-        <Dropdown
-          v-model="form.activity"
-          class="w-full mb-3"
-          optionLabel="text"
-          :options="props.activitiesTypeOptions"
-          :placeholder="t('Select activity')"
-          @change="onChangeOption"
-        >
-          <template #option="slotProps">
-            <h4
-              v-if="slotProps.option.text == 'Create Custom'"
-              class="font-semibold text-color"
-            >
-              {{ slotProps.option.text }}
-            </h4>
-            <h4 v-else>{{ slotProps.option.text }}</h4>
-          </template>
-        </Dropdown>
+        <div>
+          <Dropdown
+            v-model="formData.activity"
+            class="w-full mb-3"
+            optionLabel="text"
+            :options="props.activitiesTypeOptions"
+            :placeholder="t('Select activity')"
+            @change="onChangeOption"
+          >
+            <template #option="slotProps">
+              <h4
+                v-if="slotProps.option.text == 'Create Custom'"
+                class="font-semibold text-color"
+              >
+                {{ slotProps.option.text }}
+              </h4>
+              <h4 v-else>{{ slotProps.option.text }}</h4>
+            </template>
+          </Dropdown>
+          <!-- <h5 class="text-red-50 m-0" v-if="v$.activity.$error">
+            {{ t("Activity type is required") }}
+          </h5> -->
+        </div>
         <div class="mb-3">
           <InputText
             id="quantity"
-            v-model="form.quantity"
+            v-model="formData.quantity"
             placeholder="0"
             class="w-8 md:w-full"
             type="number"
