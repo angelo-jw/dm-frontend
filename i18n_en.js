@@ -37,7 +37,7 @@ export default {
   Or: "Or",
   "Already have an account ?": "Already have an account ?",
   "Sign In Now": "Sign In Now",
-  "Activity Tracking": "Activity Tracking",
+  Tracking: "Tracking",
   Deposits: "Deposits",
   Dashboard: "Dashboard",
   Logout: "Logout",
@@ -120,4 +120,6 @@ export default {
     "Are you sure to delete activity type {name}",
   Custom: "Create Custom",
   "Activity deleted successfully": "Activity deleted successfully",
+  "Activity type is required": "Activity type is required",
+  Type: "Type",
 };

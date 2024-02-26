@@ -23,7 +23,7 @@ const menu = [
     },
   },
   {
-    title: t("Activities Group"),
+    title: t("Activities"),
     icon: {
       element: "i",
       class: "pi pi-check",
@@ -31,7 +31,7 @@ const menu = [
     child: [
       {
         href: "/activities",
-        title: t("Activities"),
+        title: t("Type"),
         icon: {
           element: "i",
           class: "pi pi-list",
@@ -39,7 +39,7 @@ const menu = [
       },
       {
         href: "/activity-tracking",
-        title: t("Activity Tracking"),
+        title: t("Tracking"),
         icon: {
           element: "i",
           class: "pi pi-list",
