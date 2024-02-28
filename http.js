@@ -9,7 +9,7 @@ let isRefreshing = false;
 const instance = axios.create({
   baseURL: import.meta.env.VITE_APP_API_URL,
 });
-let token = `${localStorage.getItem("do-more-token")}1`;
+let token = localStorage.getItem("do-more-token");
 const logoutErrorStatus = [401];
 
 const oauth2 = function (config) {
