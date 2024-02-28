@@ -6,8 +6,12 @@ export function useAuthService() {
   const signIn = (data) => {
     return http.post(`/auth/login`, data);
   };
+  const refreshToken = (data) => {
+    return http.post("auth/refresh-token", { refresh_token: data });
+  };
   return {
     createUser,
     signIn,
+    refreshToken,
   };
 }

@@ -57,6 +57,7 @@ const onSubmit = async (e) => {
         password: password.value,
       });
       store.dispatch("auth/addToken", res.data?.token);
+      store.dispatch("auth/addRefreshToken", res.data?.refresh_token);
       router.push({ name: "dashboard" });
     } catch (err) {
       const { response } = err;
