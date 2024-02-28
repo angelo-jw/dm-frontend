@@ -1,14 +1,20 @@
 import axios from "axios";
-import router from "./src/router";
+// import router from "./src/router";
+import { useAuthService } from "@/services/AuthService";
+
+const authService = useAuthService();
+let retryFailRequest = [];
+let isRefreshing = false;
 
 const instance = axios.create({
   baseURL: import.meta.env.VITE_APP_API_URL,
 });
+let token = `${localStorage.getItem("do-more-token")}1`;
 const logoutErrorStatus = [401];
 
 const oauth2 = function (config) {
   if (localStorage.getItem("do-more-token")) {
-    config.headers.Authorization = localStorage.getItem("do-more-token");
+    config.headers.Authorization = token;
   }
   return config;
 };
@@ -18,10 +24,28 @@ instance.interceptors.response.use(
   function (response) {
     return response;
   },
-  function (error) {
-    if (error.response?.status == logoutErrorStatus) {
-      router.push({ name: "sign-in" });
-      localStorage.setItem("do-more-token", "");
+  async function (error) {
+    retryFailRequest.push(error?.config);
+    if (error.response?.status == logoutErrorStatus && !isRefreshing) {
+      isRefreshing = true;
+      try {
+        const newAccessToken = await authService.refreshToken(
+          localStorage.getItem("refresh-do-more")
+        );
+        localStorage.setItem("do-more-token", newAccessToken?.data?.token);
+        token = newAccessToken?.data?.token;
+        retryFailRequest.forEach((failRequest) => {
+          instance
+            .request(failRequest)
+            .then((response) => response)
+            .catch((err) => err);
+        });
+        retryFailRequest = [];
+      } catch (refreshError) {
+        throw refreshError;
+      } finally {
+        isRefreshing = false;
+      }
     } else {
       return Promise.reject(error);
     }
