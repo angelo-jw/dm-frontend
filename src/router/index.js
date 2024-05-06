@@ -30,8 +30,8 @@ const router = createRouter({
         import("../views/ActivityTracking/ActivityTrackingView.vue"),
     },
     {
-      path: "/payments",
-      name: "payments",
+      path: "/deposits",
+      name: "deposits",
       component: () => import("../views/Payments/PaymentsView.vue"),
     },
     {

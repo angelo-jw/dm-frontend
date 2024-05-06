@@ -89,7 +89,8 @@ onMounted(() => {
   <AuthLayout>
     <template v-slot:title>
       <div class="flex justify-content-center">
-        <h6 class="mr-1">{{ t("Don't have an account ?") }}</h6>
+        <h6 class="mr-1">{{ t("Don't have an account?") }}</h6>
+        <br>
         <router-link to="/sign-up"
           ><h6 class="text-color font-bold">
             {{ t("Sign Up Now") }}
@@ -148,6 +149,7 @@ onMounted(() => {
               Your password is required
             </h5>
           </div>
+          <br>
           <Button
             class="flex justify-content-center h-2rem"
             type="submit"

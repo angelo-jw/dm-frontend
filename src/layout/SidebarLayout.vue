@@ -28,15 +28,8 @@ const menu = [
       element: "i",
       class: "pi pi-check",
     },
+    href: "/activity-tracking",
     child: [
-      {
-        href: "/activities",
-        title: t("Type"),
-        icon: {
-          element: "i",
-          class: "pi pi-list",
-        },
-      },
       {
         href: "/activity-tracking",
         title: t("Tracking"),
@@ -45,10 +38,18 @@ const menu = [
           class: "pi pi-list",
         },
       },
+      {
+        href: "/activities",
+        title: t("Type"),
+        icon: {
+          element: "i",
+          class: "pi pi-list",
+        },
+      },
     ],
   },
   {
-    href: "/payments",
+    href: "/deposits",
     title: t("Deposits"),
     icon: {
       element: "i",

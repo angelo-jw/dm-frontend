@@ -198,7 +198,8 @@ onMounted(() => {
   <AuthLayout class="register-auth-layout">
     <template v-slot:title>
       <div class="flex justify-content-center">
-        <h6 class="mr-1">{{ t("Already have an account ?") }}</h6>
+        <h6 class="mr-1">{{ t("Already have an account?") }}</h6>
+        <br>
         <router-link to="/sign-in"
           ><h6 class="text-color font-bold">
             {{ t("Sign In Now") }}
@@ -337,6 +338,7 @@ onMounted(() => {
               </h5>
             </div>
           </div>
+          <br>
           <div class="flex align-items-center">
             <Checkbox
               inputId="termCondition"

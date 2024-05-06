@@ -45,7 +45,7 @@ const getPage = async (paginationOptions) => {
   const result = "?" + new URLSearchParams(paginationOptions).toString();
   try {
     const res = await paymentsService.getPayments(result);
-    tableData.value.content = res.data.deposits.map((payment) => {
+    tableData.value.content = res.data.deposits.map((deposit) => {
       const {
         created_time,
         amount,
@@ -53,7 +53,7 @@ const getPage = async (paginationOptions) => {
         carrier_ref,
         door_knock_commission,
         id,
-      } = payment;
+      } = deposit;
       return {
         date: day(created_time).format("YYYY-MM-DD"),
         amount,
