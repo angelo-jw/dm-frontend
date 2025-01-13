@@ -131,7 +131,7 @@ const addDefaultFormData = () => {
   <CustomDialog
     :visible="props.visible"
     customClass="create-activities"
-    :header="props.currentRow?.id ? t('Update activity') : t('Create activity')"
+    :header="props.currentRowData?.id ? t('Update activity ') : t('Create activity')"
     @onChangeVisibleState="emit('onChangeVisibleState', false)"
     @show="addDefaultFormData"
   >
@@ -177,6 +177,7 @@ const addDefaultFormData = () => {
             placeholder="0"
             class="w-8 md:w-full"
             type="number"
+            min="1"
           />
           <h5 class="text-red-50 m-0" v-if="v$.quantity.$error">
             {{ t("Quantity is required") }}

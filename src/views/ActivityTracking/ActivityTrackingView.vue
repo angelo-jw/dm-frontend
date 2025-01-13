@@ -162,6 +162,7 @@ const getActivitiesTypeOptions = async () => {
     isLoadingActivitiesModal.value = false;
   }
 };
+
 const editRow = (data) => {
   visible.value = true;
   currentRowData.value = data;
@@ -170,7 +171,7 @@ const editRow = (data) => {
 const showDeleteAlert = (data) => {
   toast.add({
     severity: "custom",
-    summary: t("Are you sure to delete", { name: data.activity }),
+    summary: t("Are you sure to delete activity type", { name: data.activity }),
     group: "activityTracking",
   });
   visibleAlert.value = true;
