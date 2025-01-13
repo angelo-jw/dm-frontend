@@ -94,7 +94,7 @@ export default {
   "Are you sure to delete carrier": "Are you sure to delete carrier {name}",
   "Carrier deleted successfully": "Carrier deleted successfully",
   "Carrier created successfully": "Carrier created successfully",
-  "Are you sure to delete": "Are you sure to delete deposit {name}",
+  "Are you sure to delete deposit": "Are you sure to delete deposit {name}",
   "Deposit deleted successfully": "Deposit deleted successfully",
   "Deposit created successfully": "Deposit created successfully",
   "Deposit updated successfully": "Deposit updated successfully",
@@ -117,7 +117,7 @@ export default {
   "Activity Type": "Activity Type",
   "Enter activity type": "Enter activity type",
   "Are you sure to delete activity type":
-    "Are you sure to delete activity type {name}",
+    "Are you sure you would like to delete this activity? ({name})",
   Custom: "Create Custom",
   "Activity deleted successfully": "Activity deleted successfully",
   "Activity type is required": "Activity type is required",
