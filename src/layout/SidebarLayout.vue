@@ -9,6 +9,8 @@ import logo1 from "../assets/logo1.png";
 
 import Avatar from "primevue/avatar";
 
+import userIcon from "../assets/userIcon.png";
+
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
@@ -173,7 +175,7 @@ const logout = () => {
           </div>
           <div class="flex justify-content-around align-items-center mb-4">
             <Avatar
-              image="https://primefaces.org/cdn/primevue/images/avatar/asiyajavayant.png"
+              :image="userIcon"
               class="cursor-pointer"
               size="large"
               shape="circle"

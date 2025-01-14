@@ -8,9 +8,16 @@ import Avatar from "primevue/avatar";
 import mobileLogo from "../assets/logo1.png";
 import MobileMenu from "../components/MobileMenu.vue";
 
+import { jwtDecode } from "jwt-decode";
+
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
+
+const token = localStorage.getItem("do-more-token");
+const decoded = jwtDecode(token);
+const userName = decoded?.name;
+const userFirstName = userName?.split(" ")[0];
 
 const menuItems = [
   { icon: "pi pi-chart-line", label: "", route: "/" },
@@ -54,10 +61,10 @@ const logout = () => {
       <div class="flex align-items-center">
         <small
           class="user-text pr-2 background-primary text-white px-2 border-round-left"
-          >{{ t("Happy Tracking,", { name: "Adalkis" }) }}</small
+          >{{ t("Happy Tracking,", { name: userFirstName }) }}</small
         >
         <Avatar
-          image="https://primefaces.org/cdn/primevue/images/avatar/asiyajavayant.png"
+          image="https://banner2.cleanpng.com/20180622/pqa/aazfxwhhl.webp"
           class="cursor-pointer relative"
           size="large"
           shape="circle"
