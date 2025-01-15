@@ -30,6 +30,7 @@ const visible = ref(false);
 const visibleAlert = ref(false);
 const currentPage = ref(0);
 const currentRowData = ref({});
+const currentPayment = ref({});
 const isLoading = ref(false);
 
 const tableData = ref({
@@ -114,6 +115,7 @@ const showDeleteAlert = (data) => {
 
 const deletePayment = async (id, closeCallback) => {
   try {
+    console.log(id);
     await paymentsService.deletePayment(id);
     getPage({
       page: 0,
