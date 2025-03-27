@@ -156,6 +156,11 @@ onMounted(() => {
             :loading="isLoading"
             :label="t('Login Now')"
           />
+          <div class="flex justify-content-center mt-3">
+            <router-link to="/reset-password" class="text-color">
+              {{ t('Forgot Password?') }}
+            </router-link>
+          </div>
         </div>
       </form>
     </template>

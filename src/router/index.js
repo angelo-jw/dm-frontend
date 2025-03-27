@@ -39,13 +39,19 @@ const router = createRouter({
       name: "carrier",
       component: () => import("../views/Carrier/CarrierView.vue"),
     },
+    {
+      path: "/reset-password",
+      name: "reset-password",
+      component: () => import("../views/ResetPasswordView.vue"),
+    }
   ],
 });
 router.beforeEach(async (to, from) => {
   if (
     !localStorage.getItem("do-more-token") &&
     to.name !== "sign-in" &&
-    to.name !== "sign-up"
+    to.name !== "sign-up" &&
+    to.name !== "reset-password"
   ) {
     return { name: "sign-in" };
   }

@@ -1,4 +1,11 @@
 export default {
+  "Enter your email address to receive password reset instructions": "Enter your email address to receive password reset instructions",
+  "Send Reset Instructions": "Send Reset Instructions",
+  "Reset Password": "Reset Password",
+  "Forgot Password?": "Forgot Password?",
+  "Back to Login": "Back to Login",
+  "Password reset instructions have been sent to your email": "Password reset instructions have been sent to your email",
+  "Error sending reset email": "Error sending reset email",
   "Don't have an account ?": "Don't have an account ?",
   "Sign Up Now": "Sign Up Now",
   Email: "Email",

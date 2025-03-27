@@ -9,9 +9,14 @@ export function useAuthService() {
   const refreshToken = (data) => {
     return http.post("auth/refresh-token", { refresh_token: data });
   };
+  const requestPasswordReset = (email) => {
+    console.log("Requesting password reset for:", email);
+    return http.post("auth/reset-password", { email: email });
+  };
   return {
     createUser,
     signIn,
     refreshToken,
+    requestPasswordReset
   };
 }
