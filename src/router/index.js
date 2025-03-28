@@ -43,6 +43,11 @@ const router = createRouter({
       path: "/reset-password",
       name: "reset-password",
       component: () => import("../views/ResetPasswordView.vue"),
+    },
+    {
+      path: "/reset-password-confirm",
+      name: "reset-password-confirm",
+      component: () => import("../views/ResetPasswordConfirmView.vue"),
     }
   ],
 });
@@ -51,7 +56,8 @@ router.beforeEach(async (to, from) => {
     !localStorage.getItem("do-more-token") &&
     to.name !== "sign-in" &&
     to.name !== "sign-up" &&
-    to.name !== "reset-password"
+    to.name !== "reset-password" &&
+    to.name !== "reset-password-confirm"
   ) {
     return { name: "sign-in" };
   }

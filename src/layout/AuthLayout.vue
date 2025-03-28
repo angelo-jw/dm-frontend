@@ -24,7 +24,7 @@ onMounted(() => {
       </template>
     </Card>
     <div class="legal-container">
-      <h6 class="legal-text">Wetmore Enterprises @ 2024</h6>
+      <h6 class="legal-text">Wetmore Enterprises @ {{ new Date().getFullYear() }}</h6>
       <div class="legal-links">
         <h6>Terms of use</h6>
         <h6>License Agreement</h6>

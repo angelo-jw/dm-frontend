@@ -15,7 +15,7 @@ const isMobile = helper.isMobile();
 
 const isShowLayout = computed(() => {
   if (route?.name) {
-    if (route.name == "sign-in" || route.name == "sign-up" || route.name == "reset-password") {
+    if (route.name == "sign-in" || route.name == "sign-up" || route.name == "reset-password" || route.name == "reset-password-confirm") {
       return false;
     }
     return true;

@@ -25,8 +25,14 @@ instance.interceptors.response.use(
     return response;
   },
   async function (error) {
-    retryFailRequest.push(error?.config);
-    if (error.response?.status == logoutErrorStatus && !isRefreshing) {
+    const isAuthEndpoint = error.config.url.includes('/auth/') || 
+                            error.config.url.includes('/login');
+    if (
+      error.response?.status == logoutErrorStatus && 
+      !isRefreshing && 
+      !isAuthEndpoint &&
+      localStorage.getItem("refresh-do-more")
+    ) {
       isRefreshing = true;
       try {
         const newAccessToken = await authService.refreshToken(
