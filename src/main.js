@@ -14,7 +14,6 @@ import icons from "./font-awesome-icons";
 import PrimeVue from "primevue/config";
 import ToastService from "primevue/toastservice";
 
-import store from "./store/index";
 
 icons.forEach((icon) => library.add(icon));
 const i18n = createI18n({
@@ -33,7 +32,6 @@ app.use(router);
 app.use(i18n);
 app.use(PrimeVue, { ripple: true });
 app.use(ToastService);
-app.use(store);
 app.component("font-awesome-icon", FontAwesomeIcon);
 
 app.mount("#app");

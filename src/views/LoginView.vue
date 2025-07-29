@@ -15,7 +15,7 @@ import {
   email,
   minLength,
 } from "../../node_modules/@vuelidate/validators";
-import { useStore } from "vuex";
+import { useAuthStore } from "@/stores/auth";
 
 import { useAuthService } from "../services/AuthService";
 
@@ -25,6 +25,7 @@ const store = useStore();
 const router = useRouter();
 
 const authService = useAuthService();
+const authStore = useAuthStore();
 
 const emailVal = ref("");
 const password = ref("");
@@ -56,8 +57,8 @@ const onSubmit = async (e) => {
         email: emailVal.value,
         password: password.value,
       });
-      store.dispatch("auth/addToken", res.data?.token);
-      store.dispatch("auth/addRefreshToken", res.data?.refresh_token);
+      authStore.setToken(res.data?.token);
+      authStore.setRefreshToken(res.data?.refresh_token)
       router.push({ name: "dashboard" });
     } catch (err) {
       const { response } = err;
