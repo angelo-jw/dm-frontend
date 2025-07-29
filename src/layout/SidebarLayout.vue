@@ -5,6 +5,8 @@ import "vue-sidebar-menu/dist/vue-sidebar-menu.css";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
+import { useAuthStore } from "@/stores/auth";
+
 import logo1 from "../assets/logo1.png";
 
 import Avatar from "primevue/avatar";
@@ -14,6 +16,7 @@ import userIcon from "../assets/userIcon.png";
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
+const authStore = useAuthStore();
 
 const menu = [
   {
@@ -68,7 +71,7 @@ const menu = [
   },
 ];
 const logout = () => {
-  localStorage.setItem("do-more-token", "");
+  authStore.logout();
   router.push("/sign-in");
 };
 </script>
