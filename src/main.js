@@ -13,6 +13,7 @@ import icons from "./font-awesome-icons";
 
 import PrimeVue from "primevue/config";
 import ToastService from "primevue/toastservice";
+import Tooltip from "primevue/tooltip";
 
 
 icons.forEach((icon) => library.add(icon));

@@ -134,7 +134,7 @@ const visibleDialog = () => {
           </h5>
         </div>
         <div class="mb-1">
-          <label for="duration">{{ t("Duration") }}</label>
+          <label for="duration">{{ t("Duration (In Minutes)") }}</label>
           <InputText
             id="activityType"
             v-model="formData.duration"

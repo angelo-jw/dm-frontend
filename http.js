@@ -7,7 +7,7 @@ let retryFailRequest = [];
 let isRefreshing = false;
 
 const instance = axios.create({
-  baseURL: import.meta.env.VITE_APP_API_URL,
+  baseURL: `${import.meta.env.VITE_APP_API_URL}/api`,
 });
 let token = localStorage.getItem("do-more-token");
 const logoutErrorStatus = [401];

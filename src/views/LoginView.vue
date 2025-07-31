@@ -21,7 +21,6 @@ import { useAuthService } from "../services/AuthService";
 
 const { t } = useI18n();
 const toast = useToast();
-const store = useStore();
 const router = useRouter();
 
 const authService = useAuthService();

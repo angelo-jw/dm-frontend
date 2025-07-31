@@ -47,9 +47,13 @@ const formData = reactive({
 });
 const isLoading = ref(false);
 
+const decimal2 = (value) =>
+  /^\d+(\.\d{1,2})?$/.test(String(value)) || value === "";
+
 const rules = {
   amount: {
     required,
+    decimal2,
   },
   carrier: {
     required,
@@ -166,9 +170,11 @@ const getCarriers = () => {
             v-model="formData.amount"
             class="w-8 md:w-full"
             type="number"
+            step="0.01"
+            min="0"
           />
           <h5 class="text-red-50 m-0" v-if="v$.amount.$error">
-            {{ t("Amount is required") }}
+            {{ v$.amount.required.$invalid ? t("Amount is required") : t("Amount must be a number with up to 2 decimals") }}
           </h5>
         </div>
         <div class="mb-1">
