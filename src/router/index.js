@@ -48,7 +48,12 @@ const router = createRouter({
       path: "/reset-password-confirm",
       name: "reset-password-confirm",
       component: () => import("../views/ResetPasswordConfirmView.vue"),
-    }
+    },
+    {
+      path: "/profile",
+      name: "profile",
+      component: () => import("../views/Profile/ProfileView.vue"),
+    },
   ],
 });
 router.beforeEach(async (to, from) => {

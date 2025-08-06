@@ -142,5 +142,6 @@ export default {
   Custom: "Create Custom",
   "Activity deleted successfully": "Activity deleted successfully",
   "Activity type is required": "Activity type is required",
+  "Already have an account?": "Already have an account?",
   Type: "Type",
 };

@@ -177,12 +177,14 @@ const logout = () => {
             <img class="logo" :src="logo1" />
           </div>
           <div class="flex justify-content-around align-items-center mb-4">
-            <Avatar
-              :image="userIcon"
-              class="cursor-pointer"
-              size="large"
-              shape="circle"
-            />
+            <router-link to="/profile">
+              <Avatar
+                :image="userIcon"
+                class="cursor-pointer"
+                size="large"
+                shape="circle"
+              />
+            </router-link>
             <div
               class="flex flex-column cursor-pointer align-items-center"
               @click="logout"

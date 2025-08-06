@@ -7,14 +7,15 @@ let retryFailRequest = [];
 let isRefreshing = false;
 
 const instance = axios.create({
-  baseURL: `${import.meta.env.VITE_APP_API_URL}/api`,
+  // baseURL: `${import.meta.env.VITE_APP_API_URL}/api`,
+  baseURL: "/api",
 });
 let token = localStorage.getItem("do-more-token");
 const logoutErrorStatus = [401];
 
 const oauth2 = function (config) {
   if (localStorage.getItem("do-more-token")) {
-    config.headers.Authorization = token;
+    config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 };
